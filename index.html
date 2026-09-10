@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pa">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#123c36" />
+  <title>Dad’s Knee Routine · 7 minutes</title>
+  <style>
+    :root { --ink:#17312d; --muted:#5f746e; --paper:#f5f2ea; --card:#fffdf8; --green:#136f63; --green-dark:#0c5149; --mint:#dcefe8; --gold:#d68b32; --red:#a33d35; --line:#dbe4dc; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; color:var(--ink); background:radial-gradient(circle at 10% 0%,#e1f2eb 0,transparent 34%),var(--paper); font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Gurmukhi",sans-serif; }
+    button { font:inherit; cursor:pointer; }
+    .shell { width:min(100%,680px); margin:auto; padding:20px 16px 40px; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:18px; }
+    .eyebrow { color:var(--green); font-size:.78rem; font-weight:800; letter-spacing:.13em; text-transform:uppercase; }
+    h1 { margin:4px 0 0; font-size:clamp(1.7rem,5vw,2.4rem); line-height:1.05; letter-spacing:-.04em; }
+    .sound { border:1px solid var(--line); background:var(--card); border-radius:999px; padding:10px 13px; color:var(--ink); font-weight:700; }
+    .notice { display:flex; gap:12px; align-items:flex-start; padding:14px 16px; border:1px solid #f0d9ad; border-radius:18px; background:#fff8e9; color:#694719; margin-bottom:16px; line-height:1.45; font-size:.94rem; }
+    .notice strong { display:block; margin-bottom:3px; }
+    .card { background:rgba(255,253,248,.92); border:1px solid rgba(219,228,220,.95); border-radius:28px; padding:20px; box-shadow:0 18px 45px rgba(23,49,45,.08); }
+    .meta { display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-weight:750; font-size:.94rem; margin-bottom:12px; }
+    .status { display:inline-flex; align-items:center; gap:7px; padding:7px 12px; border-radius:999px; background:var(--mint); color:var(--green-dark); font-weight:800; }
+    .status.rest { background:#fff0d9; color:#895719; }
+    .status.done { background:#dff4df; color:#28702f; }
+    .timer { position:relative; width:min(64vw,270px); aspect-ratio:1; margin:6px auto 18px; display:grid; place-items:center; }
+    .timer svg { position:absolute; inset:0; width:100%; height:100%; transform:rotate(-90deg); }
+    .ring-bg,.ring { fill:none; stroke-width:13; }
+    .ring-bg { stroke:#e4ebe6; }
+    .ring { stroke:var(--green); stroke-linecap:round; transition:stroke-dashoffset .25s linear,stroke .2s; }
+    .clock { text-align:center; z-index:1; }
+    .time { font-size:clamp(3.7rem,16vw,5.5rem); line-height:.9; font-weight:850; font-variant-numeric:tabular-nums; letter-spacing:-.06em; }
+    .seconds { color:var(--muted); font-size:.9rem; font-weight:750; margin-top:9px; }
+    .exercise { text-align:center; min-height:126px; }
+    .exercise h2 { margin:0 0 7px; font-size:clamp(1.35rem,5vw,1.8rem); line-height:1.2; }
+    .english { color:var(--green); font-size:1rem; font-weight:800; margin:0 0 9px; }
+    .instructions { margin:0 auto; max-width:530px; color:var(--muted); line-height:1.48; font-size:1.04rem; }
+    .next { margin-top:12px; color:var(--green); font-size:.9rem; font-weight:750; }
+    .controls { display:flex; justify-content:center; align-items:center; gap:10px; margin-top:20px; }
+    .control { width:54px; height:54px; border:0; border-radius:17px; background:#e9efeb; color:var(--ink); display:grid; place-items:center; font-size:1.5rem; transition:transform .16s ease,background .16s ease; }
+    .control:active { transform:scale(.96); }
+    .control:hover { background:#dce7e1; }
+    .control.primary { width:76px; height:76px; border-radius:23px; color:white; background:var(--green); font-size:2rem; box-shadow:0 10px 20px rgba(19,111,99,.22); }
+    .control.primary:hover { background:var(--green-dark); }
+    .help { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:16px; }
+    .tip { padding:13px 12px; background:#eef5f1; border-radius:16px; color:var(--muted); font-size:.88rem; line-height:1.3; }
+    .tip b { display:block; color:var(--ink); margin-bottom:4px; }
+    .footer { margin:18px 4px 0; color:var(--muted); font-size:.82rem; line-height:1.45; text-align:center; }
+    :focus-visible { outline:3px solid #e5a23f; outline-offset:3px; }
+    @media (max-width:500px) { .shell{padding:15px 12px 28px}.card{padding:16px;border-radius:22px}.help{grid-template-columns:1fr}.topbar{align-items:flex-start}.sound{padding:8px 10px;font-size:.85rem} }
+    @media (prefers-reduced-motion:reduce) { * { transition:none !important; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div><div class="eyebrow">A gentle daily routine</div><h1>ਗੋਡਿਆਂ ਦੀ ਕਸਰਤ <span style="font-weight:500">· Knee routine</span></h1></div>
+      <button class="sound" id="soundToggle" type="button" aria-pressed="true">🔊 Voice on</button>
+    </header>
+
+    <section class="notice" aria-label="Safety guidance"><div>ⓘ</div><div><strong>Safety first · ਸੁਰੱਖਿਆ ਪਹਿਲਾਂ</strong>Use a sturdy chair or counter for support. Stop if there is sharp pain, dizziness, chest pain, or a sudden increase in swelling. Ask a doctor or physiotherapist if this routine is suitable for you.</div></section>
+
+    <section class="card" aria-live="polite">
+      <div class="meta"><span id="progressText">Exercise 1 of 7</span><span class="status" id="status">Ready · ਤਿਆਰ</span></div>
+      <div class="timer"><svg viewBox="0 0 240 240" aria-hidden="true"><circle class="ring-bg" cx="120" cy="120" r="106"></circle><circle class="ring" id="ring" cx="120" cy="120" r="106"></circle></svg><div class="clock"><div class="time" id="time">30</div><div class="seconds">seconds · ਸਕਿੰਟ</div></div></div>
+      <div class="exercise"><h2 id="title">ਹਲਕੀ ਕਦਮਤਾਲ</h2><p class="english" id="english">Seated marching</p><p class="instructions" id="instructions">Sit tall, or stand with support. Slowly lift one knee, then the other.</p><div class="next" id="next">Next · ਅਗਲਾ: Seated leg straightening</div></div>
+      <div class="controls"><button class="control" id="prev" type="button" aria-label="Previous exercise">◀</button><button class="control primary" id="play" type="button" aria-label="Start workout">▶</button><button class="control" id="nextBtn" type="button" aria-label="Next exercise">▶</button><button class="control" id="reset" type="button" aria-label="Reset workout">↻</button></div>
+    </section>
+    <section class="help"><div class="tip"><b>Move slowly</b>Gentle and controlled is better than fast.</div><div class="tip"><b>Easy effort</b>A little stretch is okay; sharp pain is not.</div><div class="tip"><b>Take breaks</b>Stop anytime and rest when needed.</div></section>
+    <p class="footer">This is general information, not a diagnosis or personal medical advice. Do not exercise through pain.</p>
+  </main>
+<script>
+const WORKOUT=[
+ {pa:'ਹਲਕੀ ਕਦਮਤਾਲ',en:'Seated marching',desc:'Sit tall, or stand with support. Slowly lift one knee, then the other.',hi:'कुर्सी पर बैठकर धीरे-धीरे एक-एक घुटना ऊपर उठाएं।',duration:30},
+ {pa:'ਕੁਰਸੀ ’ਤੇ ਲੱਤ ਸਿੱਧੀ ਕਰਨਾ',en:'Seated leg straightening',desc:'Straighten one leg forward, hold gently for 3 seconds, then lower it with control.',hi:'कुर्सी पर बैठकर पैर सीधा करें, तीन सेकंड रोकें, फिर धीरे नीचे लाएं।',duration:40},
+ {pa:'ਸਿੱਧੀ ਲੱਤ ਚੁੱਕਣਾ',en:'Straight-leg raise',desc:'Lying down, keep one leg straight and lift it a little. Lower it slowly.',hi:'लेटकर एक पैर सीधा रखें, थोड़ा ऊपर उठाएं और धीरे नीचे लाएं।',duration:40},
+ {pa:'ਗੋਡਿਆਂ ਵਿਚਕਾਰ ਸਿਰਹਾਣਾ ਦਬਾਉਣਾ',en:'Pillow squeeze',desc:'Place a pillow between the knees. Gently squeeze for 5 seconds, then release.',hi:'घुटनों के बीच तकिया रखकर पांच सेकंड हल्का दबाएं, फिर छोड़ें।',duration:40},
+ {pa:'ਅੱਡੀਆਂ ਚੁੱਕਣਾ',en:'Calf raises',desc:'Hold a sturdy chair. Rise onto your toes, then slowly lower your heels.',hi:'मजबूत कुर्सी पकड़कर पंजों पर उठें और एड़ियां धीरे नीचे लाएं।',duration:40},
+ {pa:'ਲੱਤ ਪਿੱਛੇ ਮੋੜਨਾ',en:'Standing hamstring curl',desc:'Hold support. Bend one knee so the heel moves back, then lower slowly.',hi:'सहारा लेकर घुटने को मोड़ें और एड़ी पीछे ले जाएं, फिर धीरे नीचे लाएं।',duration:40},
+ {pa:'ਹਲਕਾ ਸਟ੍ਰੈਚ ਅਤੇ ਆਰਾਮ',en:'Gentle stretch and rest',desc:'Sit comfortably, relax your legs, and take slow, comfortable breaths.',hi:'आराम से बैठें, पैरों को ढीला छोड़ें और धीरे-धीरे सांस लें।',duration:30}
+];
+const REST=15, C=2*Math.PI*106; let i=0,rest=false,left=WORKOUT[0].duration,total=left,running=false,done=false,timer=null,sound=true,audio=null;
+const $=id=>document.getElementById(id), ring=$('ring'); ring.style.strokeDasharray=C+' '+C;
+function audioStart(){try{audio??=new(window.AudioContext||window.webkitAudioContext)();audio.resume()}catch(e){}}
+function beep(f=650,d=.12){if(!sound)return;try{audioStart();let o=audio.createOscillator(),g=audio.createGain();o.connect(g);g.connect(audio.destination);o.frequency.value=f;g.gain.setValueAtTime(.12,audio.currentTime);g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+d);o.start();o.stop(audio.currentTime+d)}catch(e){}}
+function speak(text){if(!sound||!('speechSynthesis'in window))return; speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(text);u.lang='hi-IN';u.rate=.88;speechSynthesis.speak(u)}
+function render(){let w=WORKOUT[i];$('time').textContent=String(left).padStart(2,'0');ring.style.strokeDashoffset=C-(left/total)*C;$('progressText').textContent=done?'7 / 7 complete':`Exercise ${i+1} of 7`;
+ if(done){$('status').textContent='Complete · ਮੁਕੰਮਲ';$('status').className='status done';$('title').textContent='ਸ਼ਾਬਾਸ਼! ਰੁਟੀਨ ਪੂਰੀ ਹੋ ਗਈ';$('english').textContent='Well done — take a rest';$('instructions').textContent='You finished today’s routine. Drink some water and relax.';$('next').textContent='Press ▶ to start again';$('time').textContent='00';ring.style.strokeDashoffset=0;return}
+ if(rest){$('status').textContent=running?'Rest · ਆਰਾਮ':'Rest · ਆਰਾਮ';$('status').className='status rest';$('title').textContent='ਸਾਹ ਲਓ ਅਤੇ ਆਰਾਮ ਕਰੋ';$('english').textContent='Get ready for the next exercise';$('instructions').textContent='Breathe comfortably and prepare. Continue only if you feel okay.';$('next').textContent='Next · ਅਗਲਾ: '+w.en;ring.style.stroke='var(--gold)'}else{$('status').textContent=running?'Moving · ਕਸਰਤ':'Ready · ਤਿਆਰ';$('status').className='status';$('title').textContent=w.pa;$('english').textContent=w.en;$('instructions').textContent=w.desc;$('next').textContent=i<6?'Next · ਅਗਲਾ: '+WORKOUT[i+1].en:'Last exercise · ਆਖ਼ਰੀ ਕਸਰਤ';ring.style.stroke='var(--green)'} $('play').textContent=running?'Ⅱ':'▶';}
+function stop(){clearInterval(timer);timer=null;running=false}
+function start(){audioStart();if(done){reset();return}running=true;render();if(left===total)speak(rest?'आराम करें। अगली कसरत: '+WORKOUT[i].hi:WORKOUT[i].hi);timer=setInterval(()=>{if(left>0){if(left<=3)beep(800);left--;render()}else{beep(1100,.22);if(!rest&&i<6){rest=true;left=total=REST;speak('आराम करें। अगली कसरत: '+WORKOUT[i+1].hi)}else if(rest){rest=false;left=total=WORKOUT[i].duration;speak(WORKOUT[i].hi)}else{stop();done=true;speak('शाबाश! आज की कसरत पूरी हो गई।')}render()}},1000)}
+function toggle(){if(running){stop();render()}else start()}
+function reset(){stop();i=0;rest=false;done=false;left=total=WORKOUT[0].duration;render()}
+function step(dir){stop();done=false;if(dir>0){if(rest){rest=false;left=total=WORKOUT[i].duration}else if(i<6){i++;left=total=WORKOUT[i].duration}else{done=true;left=0}}else{if(rest){rest=false;left=total=WORKOUT[i].duration}else if(i>0){i--;left=total=WORKOUT[i].duration}else left=total=WORKOUT[0].duration}render()}
+$('play').onclick=toggle;$('reset').onclick=reset;$('nextBtn').onclick=()=>step(1);$('prev').onclick=()=>step(-1);$('soundToggle').onclick=()=>{sound=!sound;$('soundToggle').textContent=sound?'🔊 Voice on':'🔇 Voice off';$('soundToggle').setAttribute('aria-pressed',sound);if(!sound)speechSynthesis?.cancel()};render();
+</script>
+</body></html>
