@@ -30,6 +30,13 @@
     .clock { text-align:center; z-index:1; }
     .time { font-size:clamp(3.7rem,16vw,5.5rem); line-height:.9; font-weight:850; font-variant-numeric:tabular-nums; letter-spacing:-.06em; }
     .seconds { color:var(--muted); font-size:.9rem; font-weight:750; margin-top:9px; }
+    .visual { width:min(100%,420px); height:160px; margin:0 auto 16px; border-radius:20px; background:linear-gradient(135deg,#eef7f2,#f7f3e9); display:grid; place-items:center; overflow:hidden; }
+    .visual svg { width:100%; height:100%; }
+    .visual .person { stroke:#17312d; stroke-width:6; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+    .visual .chair { stroke:#136f63; stroke-width:6; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+    .visual .accent { stroke:#d68b32; stroke-width:6; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+    .visual .arrow { stroke:#a33d35; stroke-width:5; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+    .visual .soft { fill:#dcefe8; stroke:none; }
     .exercise { text-align:center; min-height:126px; }
     .exercise h2 { margin:0 0 7px; font-size:clamp(1.35rem,5vw,1.8rem); line-height:1.2; }
     .english { color:var(--green); font-size:1rem; font-weight:800; margin:0 0 9px; }
@@ -62,7 +69,7 @@
     <section class="card" aria-live="polite">
       <div class="meta"><span id="progressText">Exercise 1 of 7</span><span class="status" id="status">Ready · ਤਿਆਰ</span></div>
       <div class="timer"><svg viewBox="0 0 240 240" aria-hidden="true"><circle class="ring-bg" cx="120" cy="120" r="106"></circle><circle class="ring" id="ring" cx="120" cy="120" r="106"></circle></svg><div class="clock"><div class="time" id="time">30</div><div class="seconds">seconds · ਸਕਿੰਟ</div></div></div>
-      <div class="exercise"><h2 id="title">ਹਲਕੀ ਕਦਮਤਾਲ</h2><p class="english" id="english">Seated marching</p><p class="instructions" id="instructions">Sit tall, or stand with support. Slowly lift one knee, then the other.</p><div class="next" id="next">Next · ਅਗਲਾ: Seated leg straightening</div></div>
+      <div class="visual" id="visual" aria-label="Exercise illustration"></div><div class="exercise"><h2 id="title">ਹਲਕੀ ਕਦਮਤਾਲ</h2><p class="english" id="english">Seated marching</p><p class="instructions" id="instructions">Sit tall, or stand with support. Slowly lift one knee, then the other.</p><div class="next" id="next">Next · ਅਗਲਾ: Seated leg straightening</div></div>
       <div class="controls"><button class="control" id="prev" type="button" aria-label="Previous exercise">◀</button><button class="control primary" id="play" type="button" aria-label="Start workout">▶</button><button class="control" id="nextBtn" type="button" aria-label="Next exercise">▶</button><button class="control" id="reset" type="button" aria-label="Reset workout">↻</button></div>
     </section>
     <section class="help"><div class="tip"><b>Move slowly</b>Gentle and controlled is better than fast.</div><div class="tip"><b>Easy effort</b>A little stretch is okay; sharp pain is not.</div><div class="tip"><b>Take breaks</b>Stop anytime and rest when needed.</div></section>
@@ -78,12 +85,22 @@ const WORKOUT=[
  {pa:'ਲੱਤ ਪਿੱਛੇ ਮੋੜਨਾ',en:'Standing hamstring curl',desc:'Hold support. Bend one knee so the heel moves back, then lower slowly.',voice:'सहारा लेकर घुटने को मोड़ें और एड़ी पीछे ले जाएं, फिर धीरे नीचे लाएं।',duration:40},
  {pa:'ਹਲਕਾ ਸਟ੍ਰੈਚ ਅਤੇ ਆਰਾਮ',en:'Gentle stretch and rest',desc:'Sit comfortably, relax your legs, and take slow, comfortable breaths.',voice:'आराम से बैठें, पैरों को ढीला छोड़ें और धीरे-धीरे सांस लें।',duration:30}
 ];
+const ILLUSTRATIONS=[
+`<svg viewBox="0 0 420 160" role="img" aria-label="Seated marching"><ellipse class="soft" cx="210" cy="139" rx="145" ry="10"/><circle class="person" cx="176" cy="35" r="15"/><path class="person" d="M176 51v43l-25 31m25-31 32 19 20 22M176 62l-25 28m25-28 28 18"/><path class="chair" d="M150 85v45m0-42h52v42m-66 0h82"/><path class="arrow" d="M205 112l18-14m-18 14 3-22m-3 22 19 4"/></svg>`,
+`<svg viewBox="0 0 420 160" role="img" aria-label="Seated leg straightening"><ellipse class="soft" cx="210" cy="139" rx="145" ry="10"/><circle class="person" cx="173" cy="35" r="15"/><path class="person" d="M173 51v43l-22 31m22-31 35 20 57 0m-57-20-28-18m28 18 28 18"/><path class="chair" d="M148 84v46m0-42h55v42m-68 0h82"/><path class="arrow" d="M244 118h52m-10-10 10 10-10 10"/></svg>`,
+`<svg viewBox="0 0 420 160" role="img" aria-label="Straight leg raise"><ellipse class="soft" cx="210" cy="139" rx="145" ry="10"/><circle class="person" cx="83" cy="107" r="14"/><path class="person" d="M98 107h70l45 25m-70-25 52-37 38 0m-84 37-38 0"/><path class="arrow" d="M198 70V25m-10 10 10-10 10 10"/></svg>`,
+`<svg viewBox="0 0 420 160" role="img" aria-label="Pillow squeeze"><ellipse class="soft" cx="210" cy="139" rx="145" ry="10"/><circle class="person" cx="180" cy="35" r="15"/><path class="person" d="M180 51v43m0-34-29 27m29-27 28 27m-28 7-27 36m27-36 27 36"/><path class="chair" d="M152 91v39m0-39h57v39m-68 0h80"/><rect x="174" y="96" width="16" height="20" rx="4" fill="#d68b32"/><path class="arrow" d="M164 106h-15m7-8-8 8 8 8m38-8h15m-7-8 8 8-8 8"/></svg>`,
+`<svg viewBox="0 0 420 160" role="img" aria-label="Calf raises"><ellipse class="soft" cx="210" cy="139" rx="145" ry="10"/><circle class="person" cx="210" cy="29" r="15"/><path class="person" d="M210 45v54m0-42-28 28m28-28 28 28m-28 14-20 33m20-33 20 33"/><path class="chair" d="M270 45v90m0-90h50m-50 30h36"/><path class="arrow" d="M195 132v-27m-10 10 10-10 10 10m20 17v-27m-10 10 10-10 10 10"/></svg>`,
+`<svg viewBox="0 0 420 160" role="img" aria-label="Standing hamstring curl"><ellipse class="soft" cx="210" cy="139" rx="145" ry="10"/><circle class="person" cx="190" cy="30" r="15"/><path class="person" d="M190 46v53m0-42-27 28m27-28 28 28m-28 14-20 33m20-33 37 18 18-20"/><path class="chair" d="M285 45v90m0-90h50m-50 30h36"/><path class="arrow" d="M253 113q28 22 37-6m-12 4 12-4-1 13"/></svg>`,
+`<svg viewBox="0 0 420 160" role="img" aria-label="Gentle stretch and rest"><ellipse class="soft" cx="210" cy="139" rx="145" ry="10"/><circle class="person" cx="128" cy="80" r="14"/><path class="person" d="M142 84h63l54 30m-75-22 22 26m-22-26-38 25m38 0h53"/><path class="arrow" d="M126 42v-20m-9 9 9-9 9 9m54-1v-18m-9 9 9-9 9 9"/></svg>`
+];
+const REST_ART=`<svg viewBox="0 0 420 160" role="img" aria-label="Rest"><ellipse class="soft" cx="210" cy="139" rx="145" ry="10"/><circle class="person" cx="175" cy="48" r="14"/><path class="person" d="M189 53q36 18 47 48m-45-40-30 35m30-35-30 6m75 34 22 27m-22-27-45 27"/><path class="arrow" d="M278 47q22 18 0 36m9-27-9-9-9 9m-34-15q22-18 0-36m-9 27 9 9 9-9"/></svg>`;
 const REST=15, C=2*Math.PI*106; let i=0,rest=false,left=WORKOUT[0].duration,total=left,running=false,done=false,timer=null,sound=true,audio=null;
 const $=id=>document.getElementById(id), ring=$('ring'); ring.style.strokeDasharray=C+' '+C;
 function audioStart(){try{audio??=new(window.AudioContext||window.webkitAudioContext)();audio.resume()}catch(e){}}
 function beep(f=650,d=.12){if(!sound)return;try{audioStart();let o=audio.createOscillator(),g=audio.createGain();o.connect(g);g.connect(audio.destination);o.frequency.value=f;g.gain.setValueAtTime(.12,audio.currentTime);g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+d);o.start();o.stop(audio.currentTime+d)}catch(e){}}
 function speak(text){if(!sound||!('speechSynthesis'in window))return; speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(text);u.lang='hi-IN';u.rate=.88;speechSynthesis.speak(u)}
-function render(){let w=WORKOUT[i];$('time').textContent=String(left).padStart(2,'0');ring.style.strokeDashoffset=C-(left/total)*C;$('progressText').textContent=done?'7 / 7 complete':`Exercise ${i+1} of 7`;
+function render(){let w=WORKOUT[i];$('visual').innerHTML=done?REST_ART:(rest?REST_ART:ILLUSTRATIONS[i]);$('time').textContent=String(left).padStart(2,'0');ring.style.strokeDashoffset=C-(left/total)*C;$('progressText').textContent=done?'7 / 7 complete':`Exercise ${i+1} of 7`;
  if(done){$('status').textContent='Complete · ਮੁਕੰਮਲ';$('status').className='status done';$('title').textContent='ਸ਼ਾਬਾਸ਼! ਰੁਟੀਨ ਪੂਰੀ ਹੋ ਗਈ';$('english').textContent='Well done — take a rest';$('instructions').textContent='You finished today’s routine. Drink some water and relax.';$('next').textContent='Press ▶ to start again';$('time').textContent='00';ring.style.strokeDashoffset=0;return}
  if(rest){$('status').textContent=running?'Rest · ਆਰਾਮ':'Rest · ਆਰਾਮ';$('status').className='status rest';$('title').textContent='ਸਾਹ ਲਓ ਅਤੇ ਆਰਾਮ ਕਰੋ';$('english').textContent='Get ready for the next exercise';$('instructions').textContent='Breathe comfortably and prepare. Continue only if you feel okay.';$('next').textContent='Next · ਅਗਲਾ: '+w.en;ring.style.stroke='var(--gold)'}else{$('status').textContent=running?'Moving · ਕਸਰਤ':'Ready · ਤਿਆਰ';$('status').className='status';$('title').textContent=w.pa;$('english').textContent=w.en;$('instructions').textContent=w.desc;$('next').textContent=i<6?'Next · ਅਗਲਾ: '+WORKOUT[i+1].en:'Last exercise · ਆਖ਼ਰੀ ਕਸਰਤ';ring.style.stroke='var(--green)'} $('play').textContent=running?'Ⅱ':'▶';}
 function stop(){clearInterval(timer);timer=null;running=false}
