@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="pa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ਗੋਡਿਆਂ ਦੀ ਕਸਰਤ - 7 ਮਿੰਟ ਰੁਟੀਨ</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --work-color: #059669;
+            --rest-color: #d97706;
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --text-light: #f8fafc;
+            --text-dim: #94a3b8;
+            --accent: #38bdf8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Mukta Mahee", sans-serif;
+            background-color: var(--bg);
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            background-color: var(--surface);
+            border-radius: 24px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+        }
+
+        .header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .progress-text {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            font-weight: 600;
+        }
+
+        .sound-toggle {
+            background: none;
+            border: 1px solid var(--text-dim);
+            color: var(--text-light);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .sound-toggle:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .status-badge {
+            padding: 0.35rem 1.2rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .status-work {
+            background-color: rgba(5, 150, 105, 0.2);
+            color: #34d399;
+            border: 1px solid #059669;
+        }
+
+        .status-rest {
+            background-color: rgba(217, 119, 6, 0.2);
+            color: #fbbf24;
+            border: 1px solid #d97706;
+        }
+
+        .status-ready {
+            background-color: rgba(56, 189, 248, 0.2);
+            color: #38bdf8;
+            border: 1px solid #0284c7;
+        }
+
+        .timer-display {
+            position: relative;
+            width: 240px;
+            height: 240px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .timer-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .timer-circle-bg {
+            fill: none;
+            stroke: #334155;
+            stroke-width: 12;
+        }
+
+        .timer-circle-progress {
+            fill: none;
+            stroke: var(--work-color);
+            stroke-width: 12;
+            stroke-linecap: round;
+            stroke-dasharray: 691;
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 0.2s linear, stroke 0.3s ease;
+        }
+
+        .time-number {
+            font-size: 4.5rem;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+            z-index: 2;
+        }
+
+        .exercise-info {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            min-height: 120px;
+        }
+
+        .exercise-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .exercise-desc {
+            font-size: 1.05rem;
+            color: var(--text-dim);
+            line-height: 1.4;
+        }
+
+        .next-preview {
+            font-size: 0.95rem;
+            color: var(--accent);
+            margin-top: 0.5rem;
+            min-height: 1.4em;
+        }
+
+        .controls {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: auto;
+        }
+
+        .btn {
+            background-color: #334155;
+            color: var(--text-light);
+            border: none;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.1s, background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #475569;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            width: 72px;
+            height: 72px;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn svg {
+            width: 28px;
+            height: 28px;
+            fill: currentColor;
+        }
+
+        .btn-primary svg {
+            width: 36px;
+            height: 36px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="header">
+        <span class="progress-text" id="progressText">ਕਸਰਤ 1 / 7</span>
+        <button class="sound-toggle" id="soundToggle" onclick="toggleSound()">ਅਵਾਜ਼: ਚਾਲੂ</button>
+    </div>
+
+    <div class="status-badge status-ready" id="statusBadge">ਤਿਆਰ</div>
+
+    <div class="timer-display">
+        <svg class="timer-svg" viewBox="0 0 240 240">
+            <circle class="timer-circle-bg" cx="120" cy="120" r="110"></circle>
+            <circle class="timer-circle-progress" id="progressRing" cx="120" cy="120" r="110"></circle>
+        </svg>
+        <span class="time-number" id="timeDisplay">30</span>
+    </div>
+
+    <div class="exercise-info">
+        <h2 class="exercise-title" id="exerciseTitle">ਹਲਕੀ ਕਦਮਤਾਲ (Marching)</h2>
+        <p class="exercise-desc" id="exerciseDesc">ਕੁਰਸੀ 'ਤੇ ਬੈਠ ਕੇ ਜਾਂ ਖੜ੍ਹੇ ਹੋ ਕੇ ਹੌਲੀ-ਹੌਲੀ ਗੋਡੇ ਉੱਪਰ ਚੁੱਕੋ।</p>
+        <div class="next-preview" id="nextPreview">ਅਗਲੀ: ਕੁਰਸੀ 'ਤੇ ਬੈਠ ਕੇ ਲੱਤ ਸਿੱਧੀ ਕਰਨਾ</div>
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="previousStep()" title="ਪਿਛਲਾ">
+            <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+        </button>
+        <button class="btn btn-primary" id="playBtn" onclick="togglePlay()" title="ਸ਼ੁਰੂ / ਰੋਕੋ">
+            <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <button class="btn" onclick="nextStep()" title="ਅਗਲਾ">
+            <svg viewBox="0 0 24 24"><path d="m6 18 8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+        </button>
+        <button class="btn" onclick="resetRoutine()" title="ਮੁੜ ਸ਼ੁਰੂ ਕਰੋ">
+            <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        </button>
+    </div>
+</div>
+
+<script>
+    // Punjabi for UI display, Devanagari Hindi for accurate browser TTS engines
+    const WORKOUT = [
+        {
+            title: "ਹਲਕੀ ਕਦਮਤਾਲ (Marching)",
+            desc: "ਕੁਰਸੀ 'ਤੇ ਬੈਠ ਕੇ ਜਾਂ ਖੜ੍ਹੇ ਹੋ ਕੇ ਹੌਲੀ-ਹੌਲੀ ਗੋਡੇ ਉੱਪਰ ਚੁੱਕੋ।",
+            speakName: "हल्की कदमताल",
+            speakAction: "हल्की कदमताल शुरू करें। धीरे-धीरे घुटने ऊपर उठाएं।",
+            duration: 30
+        },
+        {
+            title: "ਕੁਰਸੀ 'ਤੇ ਬੈਠ ਕੇ ਲੱਤ ਸਿੱਧੀ ਕਰਨਾ",
+            desc: "ਲੱਤ ਨੂੰ ਸਿੱਧਾ ਅੱਗੇ ਚੁੱਕੋ, ਪੰਜਾ ਖਿੱਚੋ ਅਤੇ 3 ਸਕਿੰਟ ਰੋਕੋ।",
+            speakName: "कुर्सी पर बैठकर पैर सीधा करना",
+            speakAction: "कुर्सी पर बैठें और पैर को सीधा आगे उठाएं। तीन सेकंड रोकें।",
+            duration: 40
+        },
+        {
+            title: "ਸਿੱਧੀ ਲੱਤ ਚੁੱਕਣਾ (Straight Leg Raise)",
+            desc: "ਲੇਟ ਕੇ ਇੱਕ ਲੱਤ ਸਿੱਧੀ ਉੱਪਰ ਚੁੱਕੋ ਅਤੇ ਹੌਲੀ-ਹੌਲੀ ਹੇਠਾਂ ਲਿਆਓ।",
+            speakName: "सीधी टांग उठाना",
+            speakAction: "लेटकर एक पैर बिल्कुल सीधा ऊपर उठाएं, फिर धीरे-धीरे नीचे लाएं।",
+            duration: 40
+        },
+        {
+            title: "ਗੋਡਿਆਂ ਵਿਚਕਾਰ ਸਿਰਹਾਣਾ ਦਬਾਉਣਾ",
+            desc: "ਗੋਡਿਆਂ ਵਿਚਕਾਰ ਸਿਰਹਾਣਾ ਰੱਖ ਕੇ ਅੰਦਰ ਵੱਲ 5 ਸਕਿੰਟ ਦਬਾਓ।",
+            speakName: "घुटनों के बीच तकिया दबाना",
+            speakAction: "घुटनों के बीच तकिया रखें और अंदर की तरफ पांच सेकंड दबाएं।",
+            duration: 40
+        },
+        {
+            title: "ਅੱਡੀਆਂ ਚੁੱਕਣਾ (Calf Raises)",
+            desc: "ਸਹਾਰਾ ਲੈ ਕੇ ਸਿੱਧੇ ਖੜ੍ਹੇ ਹੋਵੋ ਅਤੇ ਪੰਜਿਆਂ ਭਾਰ ਅੱਡੀਆਂ ਚੁੱਕੋ।",
+            speakName: "एड़ियां ऊपर उठाना",
+            speakAction: "सहारा लेकर सीधे खड़े हों और पंजों के बल एड़ियां ऊपर उठाएं।",
+            duration: 40
+        },
+        {
+            title: "ਖੜ੍ਹੇ ਹੋ ਕੇ ਲੱਤ ਪਿੱਛੇ ਮੋੜਨਾ (Hamstring Curl)",
+            desc: "ਗੋਡੇ ਨੂੰ ਮੋੜ ਕੇ ਅੱਡੀ ਨੂੰ ਪਿੱਛੇ ਚੁੱਕੋ ਅਤੇ ਕੰਟਰੋਲ ਨਾਲ ਹੇਠਾਂ ਲਿਆਓ।",
+            speakName: "पैर पीछे मोड़ना",
+            speakAction: "खड़े होकर पैर को घुटने से पीछे की तरफ मोड़ें।",
+            duration: 40
+        },
+        {
+            title: "ਹਲਕਾ ਸਟ੍ਰੈਚ ਅਤੇ ਆਰਾਮ",
+            desc: "ਲੱਤਾਂ ਨੂੰ ਸਿੱਧਾ ਕਰਕੇ ਡੂੰਘਾ ਸਾਹ ਲਓ ਅਤੇ ਪੱਠੇ ਢਿੱਲੇ ਛੱਡੋ।",
+            speakName: "हल्का स्ट्रेच और आराम",
+            speakAction: "पैरों को सीधा रखकर गहरा सांस लें और आराम करें।",
+            duration: 30
+        }
+    ];
+
+    const REST_DURATION = 15;
+    const CIRCUMFERENCE = 2 * Math.PI * 110;
+
+    let currentIndex = 0;
+    let isRest = false;
+    let timeLeft = WORKOUT[0].duration;
+    let totalTime = WORKOUT[0].duration;
+    let timer = null;
+    let isRunning = false;
+    let isCompleted = false;
+    let soundEnabled = true;
+    let audioCtx = null;
+    let hindiVoice = null;
+
+    const progressRing = document.getElementById("progressRing");
+    const timeDisplay = document.getElementById("timeDisplay");
+    const exerciseTitle = document.getElementById("exerciseTitle");
+    const exerciseDesc = document.getElementById("exerciseDesc");
+    const nextPreview = document.getElementById("nextPreview");
+    const statusBadge = document.getElementById("statusBadge");
+    const progressText = document.getElementById("progressText");
+    const playIcon = document.getElementById("playIcon");
+    const soundToggle = document.getElementById("soundToggle");
+
+    progressRing.style.strokeDasharray = `${CIRCUMFERENCE} ${CIRCUMFERENCE}`;
+
+    function initAudio() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx && audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+    }
+
+    function setHindiVoice() {
+        if (!('speechSynthesis' in window)) return;
+        const voices = window.speechSynthesis.getVoices();
+        hindiVoice = voices.find(v => v.lang.toLowerCase().replace('_', '-').includes('hi-in')) ||
+                     voices.find(v => v.lang.toLowerCase().startsWith('hi')) || null;
+    }
+
+    if ('speechSynthesis' in window) {
+        setHindiVoice();
+        window.speechSynthesis.onvoiceschanged = setHindiVoice;
+    }
+
+    function playBeep(freq = 600, duration = 0.12) {
+        if (!soundEnabled) return;
+        try {
+            initAudio();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.frequency.value = freq;
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        } catch (e) {}
+    }
+
+    function speakHindi(text) {
+        if (!soundEnabled || !('speechSynthesis' in window)) return;
+        try {
+            window.speechSynthesis.cancel();
+            if (!hindiVoice) setHindiVoice();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'hi-IN';
+            if (hindiVoice) {
+                utterance.voice = hindiVoice;
+            }
+            utterance.rate = 0.9;
+            utterance.pitch = 1.0;
+            window.speechSynthesis.speak(utterance);
+        } catch (e) {}
+    }
+
+    function toggleSound() {
+        soundEnabled = !soundEnabled;
+        soundToggle.textContent = soundEnabled ? "ਅਵਾਜ਼: ਚਾਲੂ" : "ਅਵਾਜ਼: ਬੰਦ";
+        if (!soundEnabled && 'speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+        }
+    }
+
+    function updateProgressRing() {
+        const offset = CIRCUMFERENCE - (timeLeft / totalTime) * CIRCUMFERENCE;
+        progressRing.style.strokeDashoffset = offset;
+    }
+
+    function renderState() {
+        timeDisplay.textContent = timeLeft < 10 ? `0${timeLeft}` : timeLeft;
+        updateProgressRing();
+
+        if (isCompleted) {
+            statusBadge.textContent = "ਮੁਕੰਮਲ!";
+            statusBadge.className = "status-badge status-work";
+            progressRing.style.stroke = "var(--work-color)";
+            progressRing.style.strokeDashoffset = 0;
+            exerciseTitle.textContent = "ਸ਼ਾਬਾਸ਼! ਕਸਰਤ ਪੂਰੀ ਹੋ ਗਈ";
+            exerciseDesc.textContent = "ਤੁਸੀਂ ਅੱਜ ਦਾ ਅਭਿਆਸ ਬਹੁਤ ਵਧੀਆ ਤਰੀਕੇ ਨਾਲ ਪੂਰਾ ਕੀਤਾ ਹੈ।";
+            nextPreview.textContent = "";
+            timeDisplay.textContent = "00";
+            progressText.textContent = `${WORKOUT.length} / ${WORKOUT.length} ਪੂਰੀਆਂ`;
+            return;
+        }
+
+        if (isRest) {
+            statusBadge.textContent = isRunning ? "ਆਰਾਮ (Rest)" : "ਆਰਾਮ - ਰੋਕਿਆ";
+            statusBadge.className = "status-badge status-rest";
+            progressRing.style.stroke = "var(--rest-color)";
+            exerciseTitle.textContent = "ਸਾਹ ਲਓ ਅਤੇ ਆਰਾਮ ਕਰੋ";
+            exerciseDesc.textContent = "ਅਗਲੀ ਕਸਰਤ ਲਈ ਤਿਆਰ ਹੋ ਜਾਓ";
+            nextPreview.textContent = `ਅਗਲੀ: ${WORKOUT[currentIndex].title}`;
+            progressText.textContent = `ਕਸਰਤ ${currentIndex} / ${WORKOUT.length} ਪੂਰੀ`;
+        } else {
+            const current = WORKOUT[currentIndex];
+            if (!isRunning && timeLeft === totalTime && currentIndex === 0) {
+                statusBadge.textContent = "ਤਿਆਰ";
+                statusBadge.className = "status-badge status-ready";
+            } else if (!isRunning) {
+                statusBadge.textContent = "ਰੋਕਿਆ (Paused)";
+                statusBadge.className = "status-badge status-ready";
+            } else {
+                statusBadge.textContent = "ਕਸਰਤ (Work)";
+                statusBadge.className = "status-badge status-work";
+            }
+            progressRing.style.stroke = "var(--work-color)";
+            exerciseTitle.textContent = current.title;
+            exerciseDesc.textContent = current.desc;
+            progressText.textContent = `ਕਸਰਤ ${currentIndex + 1} / ${WORKOUT.length}`;
+
+            if (currentIndex + 1 < WORKOUT.length) {
+                nextPreview.textContent = `ਅਗਲੀ: ${WORKOUT[currentIndex + 1].title}`;
+            } else {
+                nextPreview.textContent = "ਆਖ਼ਰੀ ਕਸਰਤ";
+            }
+        }
+    }
+
+    function tick() {
+        if (timeLeft > 0) {
+            if (timeLeft <= 3) {
+                playBeep(800, 0.1);
+            }
+            timeLeft--;
+            renderState();
+        } else {
+            handleStepCompletion();
+        }
+    }
+
+    function handleStepCompletion() {
+        playBeep(1200, 0.25);
+
+        if (!isRest) {
+            if (currentIndex + 1 < WORKOUT.length) {
+                isRest = true;
+                currentIndex++;
+                timeLeft = REST_DURATION;
+                totalTime = REST_DURATION;
+                renderState();
+                speakHindi(`आराम करें। अगली कसरत है: ${WORKOUT[currentIndex].speakName}`);
+            } else {
+                completeWorkout();
+            }
+        } else {
+            isRest = false;
+            timeLeft = WORKOUT[currentIndex].duration;
+            totalTime = WORKOUT[currentIndex].duration;
+            renderState();
+            speakHindi(WORKOUT[currentIndex].speakAction);
+        }
+    }
+
+    function completeWorkout() {
+        clearInterval(timer);
+        timer = null;
+        isRunning = false;
+        isCompleted = true;
+        playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+        renderState();
+        speakHindi("शाबाश! आज की कसरत पूरी हो गई है।");
+    }
+
+    function togglePlay() {
+        initAudio();
+        if (isCompleted) {
+            resetRoutine();
+        }
+        if (isRunning) {
+            clearInterval(timer);
+            timer = null;
+            isRunning = false;
+            playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+            renderState();
+        } else {
+            isRunning = true;
+            playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+            renderState();
+            if (timeLeft === totalTime) {
+                speakHindi(isRest ? `आराम करें। अगली कसरत: ${WORKOUT[currentIndex].speakName}` : WORKOUT[currentIndex].speakAction);
+            }
+            timer = setInterval(tick, 1000);
+        }
+    }
+
+    function nextStep() {
+        clearInterval(timer);
+        timer = null;
+        isRunning = false;
+        isCompleted = false;
+        playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+        
+        if (isRest) {
+            isRest = false;
+            timeLeft = WORKOUT[currentIndex].duration;
+            totalTime = timeLeft;
+            renderState();
+        } else if (currentIndex < WORKOUT.length - 1) {
+            currentIndex++;
+            isRest = false;
+            timeLeft = WORKOUT[currentIndex].duration;
+            totalTime = timeLeft;
+            renderState();
+        } else {
+            completeWorkout();
+        }
+    }
+
+    function previousStep() {
+        clearInterval(timer);
+        timer = null;
+        isRunning = false;
+        isCompleted = false;
+        playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+
+        if (isRest) {
+            if (currentIndex > 0) {
+                currentIndex--;
+            }
+            isRest = false;
+            timeLeft = WORKOUT[currentIndex].duration;
+            totalTime = timeLeft;
+            renderState();
+        } else {
+            if (timeLeft < totalTime - 3) {
+                timeLeft = WORKOUT[currentIndex].duration;
+                totalTime = timeLeft;
+                renderState();
+            } else if (currentIndex > 0) {
+                currentIndex--;
+                timeLeft = WORKOUT[currentIndex].duration;
+                totalTime = timeLeft;
+                renderState();
+            } else {
+                timeLeft = WORKOUT[0].duration;
+                totalTime = timeLeft;
+                renderState();
+            }
+        }
+    }
+
+    function resetRoutine() {
+        clearInterval(timer);
+        timer = null;
+        isRunning = false;
+        isCompleted = false;
+        currentIndex = 0;
+        isRest = false;
+        timeLeft = WORKOUT[0].duration;
+        totalTime = WORKOUT[0].duration;
+        playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+        renderState();
+    }
+
+    renderState();
+</script>
+
+</body>
+</html>
