@@ -212,6 +212,49 @@ h1, .top h1 { overflow-wrap: anywhere; }
   .controls .control.primary:active { transform: translateY(-5px) scale(.96); }
 }
 
+
+/* Above-the-fold mobile layout: controls appear before timer and illustration */
+@media (max-width: 600px) {
+  .card { display: flex; flex-direction: column; }
+  .card .meta { order: 0; }
+  .card .controls { order: 1; }
+  .card .timer { order: 2; }
+  .card .visual { order: 3; }
+  .card .exercise { order: 4; }
+  .controls {
+    position: static;
+    display: flex;
+    width: 100%;
+    margin: 0 auto 10px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    justify-content: center;
+  }
+  .controls .control.primary,
+  .controls .control.primary:active { transform: none; }
+  .timer { width: min(48vw, 190px); margin: 2px auto 12px; }
+  .visual { height: 132px; margin-bottom: 12px; }
+  .exercise { min-height: 108px; }
+  .exercise h2 { font-size: 1.28rem; margin-bottom: 4px; }
+  .instructions { font-size: .94rem; line-height: 1.35; }
+  .next { margin-top: 7px; padding: 5px 10px; font-size: .82rem; }
+  .notice { margin-bottom: 10px; padding: 10px 12px; font-size: .82rem; line-height: 1.32; }
+  .help, .tips, .footer { display: none; }
+  body { padding-bottom: max(14px, env(safe-area-inset-bottom)); }
+}
+@media (max-width: 370px) {
+  .timer { width: 160px; }
+  .visual { height: 108px; }
+  .exercise { min-height: 96px; }
+  .notice { font-size: .76rem; }
+  .control, .control.primary { width: 44px; height: 44px; min-width: 44px; min-height: 44px; }
+  .control.primary { width: 60px; height: 60px; }
+}
+
 </style>
 </head>
 <body>
