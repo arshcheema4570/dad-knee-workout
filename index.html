@@ -255,6 +255,45 @@ h1, .top h1 { overflow-wrap: anywhere; }
   .control.primary { width: 60px; height: 60px; }
 }
 
+
+/* Final mobile UI: action bar is visible at the top on first paint */
+@media (max-width: 600px) {
+  body { padding-top: calc(68px + env(safe-area-inset-top)); }
+  .topbar, .top { margin-top: 8px; }
+  .controls {
+    position: fixed !important;
+    top: env(safe-area-inset-top);
+    bottom: auto !important;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    height: 68px;
+    width: 100%;
+    margin: 0 !important;
+    padding: 8px max(12px, env(safe-area-inset-left)) 8px max(12px, env(safe-area-inset-right)) !important;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(255,255,255,.97);
+    border-top: 0;
+    border-bottom: 1px solid #dce8ef;
+    box-shadow: 0 8px 24px rgba(16,42,67,.16);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+  }
+  .controls .control { width: 46px; height: 46px; min-width: 46px; min-height: 46px; }
+  .controls .control.primary,
+  .controls .control.primary:active { width: 54px; height: 54px; transform: translateY(-2px); }
+  .notice { margin-top: 8px; }
+}
+@media (max-width: 370px) {
+  body { padding-top: calc(62px + env(safe-area-inset-top)); }
+  .controls { height: 62px; padding-top: 6px !important; padding-bottom: 6px !important; }
+  .controls .control { width: 42px; height: 42px; min-width: 42px; min-height: 42px; }
+  .controls .control.primary,
+  .controls .control.primary:active { width: 50px; height: 50px; }
+}
+
 </style>
 </head>
 <body>
