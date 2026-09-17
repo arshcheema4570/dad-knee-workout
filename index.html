@@ -294,6 +294,19 @@ h1, .top h1 { overflow-wrap: anywhere; }
   .controls .control.primary:active { width: 50px; height: 50px; }
 }
 
+
+/* Start confirmation modal: safety guidance appears only when the workout begins */
+.safety-modal[hidden] { display: none; }
+.safety-modal { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 20px; background: rgba(10, thirty, 45, .48); background: rgba(16,42,67,.48); }
+.safety-dialog { width: min(100%, 460px); max-height: min(90svh, 620px); overflow: auto; padding: 24px; border: 1px solid #dce8ef; border-radius: 26px; background: #fff; color: var(--ink); box-shadow: 0 24px 70px rgba(16,42,67,.28); }
+.safety-dialog h2 { margin: 0 0 8px; font-size: 1.35rem; letter-spacing: -.03em; }
+.safety-dialog p { margin: 0; color: var(--muted); line-height: 1.5; font-size: .95rem; }
+.safety-actions { display: flex; gap: 10px; margin-top: 20px; }
+.safety-actions button { flex: 1; min-height: 48px; border: 0; border-radius: 14px; font-weight: 800; cursor: pointer; touch-action: manipulation; }
+.safety-cancel { background: #edf3f5; color: var(--ink); }
+.safety-start { background: linear-gradient(145deg, var(--accent), var(--accent-dark, #087168)); color: #fff; box-shadow: 0 10px 20px rgba(11,143,131,.25); }
+@media (max-width: 600px) { .safety-modal { align-items: end; padding: 12px; padding-bottom: max(12px, env(safe-area-inset-bottom)); } .safety-dialog { border-radius: 24px; padding: 20px; } }
+
 </style>
 </head>
 <body>
@@ -302,8 +315,6 @@ h1, .top h1 { overflow-wrap: anywhere; }
       <div><div class="eyebrow">A gentle daily routine</div><h1>ਗੋਡਿਆਂ ਦੀ ਕਸਰਤ <span style="font-weight:500">· Knee routine</span></h1></div>
       <button class="sound" id="soundToggle" type="button" aria-pressed="true">🔊 Voice on</button>
     </header>
-
-    <section class="notice" aria-label="Safety guidance"><div>ⓘ</div><div><strong>Safety first · ਸੁਰੱਖਿਆ ਪਹਿਲਾਂ</strong>Use a sturdy chair or counter for support. Stop if there is sharp pain, dizziness, chest pain, or a sudden increase in swelling. Ask a doctor or physiotherapist if this routine is suitable for you.</div></section>
 
     <section class="card" aria-live="polite">
       <div class="meta"><span id="progressText">Exercise 1 of 7</span><span class="status" id="status">Ready · ਤਿਆਰ</span></div>
@@ -314,6 +325,14 @@ h1, .top h1 { overflow-wrap: anywhere; }
     <section class="help"><div class="tip"><b>Move slowly</b>Gentle and controlled is better than fast.</div><div class="tip"><b>Easy effort</b>A little stretch is okay; sharp pain is not.</div><div class="tip"><b>Take breaks</b>Stop anytime and rest when needed.</div></section>
     <p class="footer">This is general information, not a diagnosis or personal medical advice. Do not exercise through pain.</p>
   </main>
+    <div class="safety-modal" id="safetyModal" role="dialog" aria-modal="true" aria-labelledby="safetyTitle" hidden>
+      <div class="safety-dialog">
+        <h2 id="safetyTitle">Safety first · ਸੁਰੱਖਿਆ ਪਹਿਲਾਂ</h2>
+        <p>Use a sturdy chair or counter for support. Stop if there is sharp pain, dizziness, chest pain, or a sudden increase in swelling. For eye exercises, do not press or rub your eyes. Stop for pain, flashing lights, new floaters, double vision, or sudden vision changes. Ask a doctor or physiotherapist/eye-care professional if this routine is suitable for you.</p>
+        <div class="safety-actions"><button class="safety-cancel" id="safetyCancel" type="button">Cancel</button><button class="safety-start" id="safetyStart" type="button">I understand · Start</button></div>
+      </div>
+    </div>
+
 <script>
 const WORKOUT=[
  {pa:'ਹਲਕੀ ਕਦਮਤਾਲ',en:'Seated marching',desc:'Sit tall, or stand with support. Slowly lift one knee, then the other.',voice:'कुर्सी पर बैठकर धीरे-धीरे एक-एक घुटना ऊपर उठाएं।',duration:30},
@@ -340,7 +359,7 @@ function start(){audioStart();if(done){reset();return}running=true;render();if(l
 function toggle(){if(running){stop();render()}else start()}
 function reset(){stop();i=0;rest=false;done=false;left=total=WORKOUT[0].duration;render()}
 function step(dir){stop();done=false;if(dir>0){if(rest){rest=false;left=total=WORKOUT[i].duration}else if(i<6){i++;left=total=WORKOUT[i].duration}else{done=true;left=0}}else{if(rest){rest=false;left=total=WORKOUT[i].duration}else if(i>0){i--;left=total=WORKOUT[i].duration}else left=total=WORKOUT[0].duration}render()}
-$('play').onclick=toggle;$('reset').onclick=reset;$('nextBtn').onclick=()=>step(1);$('prev').onclick=()=>step(-1);$('soundToggle').onclick=()=>{sound=!sound;$('soundToggle').textContent=sound?'🔊 Voice on':'🔇 Voice off';$('soundToggle').setAttribute('aria-pressed',sound);if(!sound)speechSynthesis?.cancel()};render();
+let confirmed=false;const safetyModal=$('safetyModal');function requestStart(){if(!running&&!done&&!confirmed){safetyModal.hidden=false;$('safetyStart').focus();return}toggle()}$('safetyStart').onclick=()=>{confirmed=true;safetyModal.hidden=true;start()};$('safetyCancel').onclick=()=>{safetyModal.hidden=true;$('play').focus()};$('play').onclick=requestStart;$('reset').onclick=reset;$('nextBtn').onclick=()=>step(1);$('prev').onclick=()=>step(-1);$('soundToggle').onclick=()=>{sound=!sound;$('soundToggle').textContent=sound?'🔊 Voice on':'🔇 Voice off';$('soundToggle').setAttribute('aria-pressed',sound);if(!sound)speechSynthesis?.cancel()};render();
 </script>
 
 <script>
