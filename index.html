@@ -4,7 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#123c36" />
-  <title>Dad’s Knee Routine · 7 minutes</title>
+  <meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Knee Routine">
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20512%20512%27%3E%3Crect%20width%3D%27512%27%20height%3D%27512%27%20rx%3D%27112%27%20fill%3D%27%23123c36%27%2F%3E%3Cpath%20d%3D%27M196%20128L300%20292L188%20428%27%20fill%3D%27none%27%20stroke%3D%27%23f5f2ea%27%20stroke-width%3D%2744%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%2F%3E%3Ccircle%20cx%3D%27300%27%20cy%3D%27292%27%20r%3D%2756%27%20fill%3D%27%23f5f2ea%27%2F%3E%3Ccircle%20cx%3D%27300%27%20cy%3D%27292%27%20r%3D%2728%27%20fill%3D%27%232dd4a8%27%2F%3E%3C%2Fsvg%3E">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<title>Dad’s Knee Routine · 7 minutes</title>
   <style>
     :root { --ink:#17312d; --muted:#5f746e; --paper:#f5f2ea; --card:#fffdf8; --green:#136f63; --green-dark:#0c5149; --mint:#dcefe8; --gold:#d68b32; --red:#a33d35; --line:#dbe4dc; }
     * { box-sizing:border-box; }
@@ -343,7 +350,7 @@ const WORKOUT=[
  {pa:'ਲੱਤ ਪਿੱਛੇ ਮੋੜਨਾ',en:'Standing hamstring curl',desc:'Hold support. Bend one knee so the heel moves back, then lower slowly.',voice:'सहारा लेकर घुटने को मोड़ें और एड़ी पीछे ले जाएं, फिर धीरे नीचे लाएं।',duration:40},
  {pa:'ਹਲਕਾ ਸਟ੍ਰੈਚ ਅਤੇ ਆਰਾਮ',en:'Gentle stretch and rest',desc:'Sit comfortably, relax your legs, and take slow, comfortable breaths.',voice:'आराम से बैठें, पैरों को ढीला छोड़ें और धीरे-धीरे सांस लें।',duration:30}
 ];
-const GRAPHICS=['https://raw.githubusercontent.com/arshcheema4570/dad-knee-workout/main/assets/man-seated-marching.png', 'https://raw.githubusercontent.com/arshcheema4570/dad-knee-workout/main/assets/man-seated-leg-straightening.png', 'https://raw.githubusercontent.com/arshcheema4570/dad-knee-workout/main/assets/man-straight-leg-raise.png', 'https://raw.githubusercontent.com/arshcheema4570/dad-knee-workout/main/assets/man-pillow-squeeze.png', 'https://raw.githubusercontent.com/arshcheema4570/dad-knee-workout/main/assets/man-calf-raises.png', 'https://raw.githubusercontent.com/arshcheema4570/dad-knee-workout/main/assets/man-standing-hamstring-curl.png', 'https://raw.githubusercontent.com/arshcheema4570/dad-knee-workout/main/assets/man-gentle-stretch-rest.png'];
+const GRAPHICS=['./assets/man-seated-marching.png', './assets/man-seated-leg-straightening.png', './assets/man-straight-leg-raise.png', './assets/man-pillow-squeeze.png', './assets/man-calf-raises.png', './assets/man-standing-hamstring-curl.png', './assets/man-gentle-stretch-rest.png'];
 const GRAPHIC_LABELS=['Seated marching illustration','Seated leg straightening illustration','Straight leg raise illustration','Pillow squeeze illustration','Calf raises illustration','Standing hamstring curl illustration','Gentle stretch and rest illustration'];
 const REST_ART=GRAPHICS[6];
 const REST=15, C=2*Math.PI*106; let i=0,rest=false,left=WORKOUT[0].duration,total=left,running=false,done=false,timer=null,sound=true,audio=null;
@@ -385,4 +392,9 @@ let confirmed=false;const safetyModal=$('safetyModal');function requestStart(){i
 })();
 </script>
 
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () { navigator.serviceWorker.register('./sw.js'); });
+}
+</script>
 </body></html>
