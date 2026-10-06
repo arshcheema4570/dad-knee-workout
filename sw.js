@@ -1,17 +1,17 @@
-const CACHE_NAME = 'knee-routine-v2';
+const CACHE_NAME = 'knee-routine-v3';
 const APP_SHELL = [
   './',
   './index.html',
   './manifest.json',
   './icons/icon-192.png',
   './icons/icon-512.png',
-  './assets/man-calf-raises.png',
-  './assets/man-gentle-stretch-rest.png',
-  './assets/man-pillow-squeeze.png',
-  './assets/man-seated-leg-straightening.png',
-  './assets/man-seated-marching.png',
-  './assets/man-standing-hamstring-curl.png',
-  './assets/man-straight-leg-raise.png',];
+  './assets/man-calf-raises.webp',
+  './assets/man-gentle-stretch-rest.webp',
+  './assets/man-pillow-squeeze.webp',
+  './assets/man-seated-leg-straightening.webp',
+  './assets/man-seated-marching.webp',
+  './assets/man-standing-hamstring-curl.webp',
+  './assets/man-straight-leg-raise.webp',];
 
 self.addEventListener('install', event => {
   event.waitUntil(

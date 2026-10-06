@@ -12,6 +12,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20512%20512%27%3E%3Crect%20width%3D%27512%27%20height%3D%27512%27%20rx%3D%27112%27%20fill%3D%27%23123c36%27%2F%3E%3Cpath%20d%3D%27M196%20128L300%20292L188%20428%27%20fill%3D%27none%27%20stroke%3D%27%23f5f2ea%27%20stroke-width%3D%2744%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%2F%3E%3Ccircle%20cx%3D%27300%27%20cy%3D%27292%27%20r%3D%2756%27%20fill%3D%27%23f5f2ea%27%2F%3E%3Ccircle%20cx%3D%27300%27%20cy%3D%27292%27%20r%3D%2728%27%20fill%3D%27%232dd4a8%27%2F%3E%3C%2Fsvg%3E">
 <link rel="apple-touch-icon" href="./icons/icon-192.png">
 <title>Dad’s Knee Routine · 7 minutes</title>
+<meta name="description" content="Seven gentle, timed knee-mobility exercises with English and Punjabi instructions, illustrations, and safety notes. General information, not medical advice.">
   <style>
     :root { --ink:#17312d; --muted:#5f746e; --paper:#f5f2ea; --card:#fffdf8; --green:#136f63; --green-dark:#0c5149; --mint:#dcefe8; --gold:#d68b32; --red:#a33d35; --line:#dbe4dc; }
     * { box-sizing:border-box; }
@@ -39,6 +40,7 @@
     .seconds { color:var(--muted); font-size:.9rem; font-weight:750; margin-top:9px; }
     .visual { width:min(100%,420px); height:220px; margin:0 auto 16px; border-radius:20px; background:linear-gradient(135deg,#eef7f2,#f7f3e9); display:grid; place-items:center; overflow:hidden; }
     .visual svg { width:100%; height:100%; }
+    .visual picture { width:100%; height:100%; display:block; }
     .visual img { width:100%; height:100%; object-fit:contain; display:block; }
     .visual .person { stroke:#17312d; stroke-width:6; stroke-linecap:round; stroke-linejoin:round; fill:none; }
     .visual .chair { stroke:#136f63; stroke-width:6; stroke-linecap:round; stroke-linejoin:round; fill:none; }
@@ -368,7 +370,7 @@ const WORKOUT=[
  {pa:'ਲੱਤ ਪਿੱਛੇ ਮੋੜਨਾ',en:'Standing hamstring curl',desc:'Hold support. Bend one knee so the heel moves back, then lower slowly.',voice:'सहारा लेकर घुटने को मोड़ें और एड़ी पीछे ले जाएं, फिर धीरे नीचे लाएं।',duration:40},
  {pa:'ਹਲਕਾ ਸਟ੍ਰੈਚ ਅਤੇ ਆਰਾਮ',en:'Gentle stretch and rest',desc:'Sit comfortably, relax your legs, and take slow, comfortable breaths.',voice:'आराम से बैठें, पैरों को ढीला छोड़ें और धीरे-धीरे सांस लें।',duration:30}
 ];
-const GRAPHICS=['./assets/man-seated-marching.png', './assets/man-seated-leg-straightening.png', './assets/man-straight-leg-raise.png', './assets/man-pillow-squeeze.png', './assets/man-calf-raises.png', './assets/man-standing-hamstring-curl.png', './assets/man-gentle-stretch-rest.png'];
+const GRAPHICS=['./assets/man-seated-marching.webp', './assets/man-seated-leg-straightening.webp', './assets/man-straight-leg-raise.webp', './assets/man-pillow-squeeze.webp', './assets/man-calf-raises.webp', './assets/man-standing-hamstring-curl.webp', './assets/man-gentle-stretch-rest.webp'];
 const GRAPHIC_LABELS=['Seated marching illustration','Seated leg straightening illustration','Straight leg raise illustration','Pillow squeeze illustration','Calf raises illustration','Standing hamstring curl illustration','Gentle stretch and rest illustration'];
 const REST_ART=GRAPHICS[6];
 const REST=15, C=2*Math.PI*106; let i=0,rest=false,left=WORKOUT[0].duration,total=left,running=false,done=false,timer=null,sound=true,audio=null;
@@ -376,7 +378,7 @@ const $=id=>document.getElementById(id), ring=$('ring'); ring.style.strokeDashar
 function audioStart(){try{audio??=new(window.AudioContext||window.webkitAudioContext)();audio.resume()}catch(e){}}
 function beep(f=650,d=.12){if(!sound)return;try{audioStart();let o=audio.createOscillator(),g=audio.createGain();o.connect(g);g.connect(audio.destination);o.frequency.value=f;g.gain.setValueAtTime(.12,audio.currentTime);g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+d);o.start();o.stop(audio.currentTime+d)}catch(e){}}
 function speak(text){if(!sound||!('speechSynthesis'in window))return; speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(text);u.lang='hi-IN';u.rate=.88;speechSynthesis.speak(u)}
-function render(){let w=WORKOUT[i];$('visual').innerHTML=`<img src="${done||rest?REST_ART:GRAPHICS[i]}" alt="${done||rest?'Rest illustration':GRAPHIC_LABELS[i]}">`;$('time').textContent=String(left).padStart(2,'0');ring.style.strokeDashoffset=C-(left/total)*C;$('progressText').textContent=done?'7 / 7 complete':`Exercise ${i+1} of 7`;
+function render(){let w=WORKOUT[i],art=done||rest?REST_ART:GRAPHICS[i];$('visual').innerHTML=`<picture><source srcset="${art}" type="image/webp"><img src="${art.replace(/\.webp$/,'.png')}" alt="${done||rest?'Rest illustration':GRAPHIC_LABELS[i]}"></picture>`;$('time').textContent=String(left).padStart(2,'0');ring.style.strokeDashoffset=C-(left/total)*C;$('progressText').textContent=done?'7 / 7 complete':`Exercise ${i+1} of 7`;
  if(done){$('status').textContent='Complete · ਮੁਕੰਮਲ';$('status').className='status done';$('title').textContent='ਸ਼ਾਬਾਸ਼! ਰੁਟੀਨ ਪੂਰੀ ਹੋ ਗਈ';$('english').textContent='Well done — take a rest';$('instructions').textContent='You finished today’s routine. Drink some water and relax.';$('next').textContent='Press ▶ to start again';$('time').textContent='00';ring.style.strokeDashoffset=0;return}
  if(rest){$('status').textContent=running?'Rest · ਆਰਾਮ':'Rest · ਆਰਾਮ';$('status').className='status rest';$('title').textContent='ਸਾਹ ਲਓ ਅਤੇ ਆਰਾਮ ਕਰੋ';$('english').textContent='Get ready for the next exercise';$('instructions').textContent='Breathe comfortably and prepare. Continue only if you feel okay.';$('next').textContent='Next · ਅਗਲਾ: '+w.en;ring.style.stroke='var(--gold)'}else{$('status').textContent=running?'Moving · ਕਸਰਤ':'Ready · ਤਿਆਰ';$('status').className='status';$('title').textContent=w.pa;$('english').textContent=w.en;$('instructions').textContent=w.desc;$('next').textContent=i<6?'Next · ਅਗਲਾ: '+WORKOUT[i+1].en:'Last exercise · ਆਖ਼ਰੀ ਕਸਰਤ';ring.style.stroke='var(--green)'} $('play').textContent=running?'Ⅱ':'▶';}
 function stop(){clearInterval(timer);timer=null;running=false}
