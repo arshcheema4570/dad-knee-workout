@@ -1,4 +1,11 @@
-const CACHE_NAME = 'knee-routine-v7';
+const CACHE_NAME = 'knee-routine-v8';
+// Phonon 31M English voice (~35 MB voice model) is NOT precached here. It
+// downloads on first English TTS use from Hugging Face and is then cached
+// by the Phonon runtime in its own Cache API bucket ('phonon-tts-v1') —
+// never re-downloaded on open. Cross-origin requests pass through this
+// worker untouched (see the fetch handler), so the runtime owns that cache.
+// The vendored Phonon runtime files (./vendor/phonon-tts/) are same-origin
+// and are cached on first fetch by the fetch handler below.
 const APP_SHELL = [
   './',
   './index.html',

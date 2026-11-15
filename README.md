@@ -6,10 +6,10 @@ A gentle, illustrated knee-mobility routine PWA made for family use, with seven 
 
 ## Features
 
-- Seven illustrated exercises with Punjabi and English labels and instructions.
+- Seven illustrated exercises with an English/Hindi language toggle (English or Hindi titles and instructions; the Punjabi labels are no longer shown).
 - Start/pause, previous/next, reset, and voice controls.
 - Installable PWA with an offline app shell and exercise illustrations.
-- No account required. Voice announcements use the device's built-in Hindi speech (`hi-IN`), with no model download.
+- No account required. Voice follows the language: English uses the vendored Phonon 31M natural voice (its ~35 MB voice downloads once on first English use, then works offline); Hindi uses the device's built-in Hindi speech (`hi-IN`), with no model download.
 
 ## Use and install
 

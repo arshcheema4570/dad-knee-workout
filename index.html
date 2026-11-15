@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pa">
+<html lang="hi">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,8 +11,8 @@
 <link rel="manifest" href="./manifest.json">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20512%20512%27%3E%3Crect%20width%3D%27512%27%20height%3D%27512%27%20rx%3D%27112%27%20fill%3D%27%23123c36%27%2F%3E%3Cpath%20d%3D%27M196%20128L300%20292L188%20428%27%20fill%3D%27none%27%20stroke%3D%27%23f5f2ea%27%20stroke-width%3D%2744%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%2F%3E%3Ccircle%20cx%3D%27300%27%20cy%3D%27292%27%20r%3D%2756%27%20fill%3D%27%23f5f2ea%27%2F%3E%3Ccircle%20cx%3D%27300%27%20cy%3D%27292%27%20r%3D%2728%27%20fill%3D%27%232dd4a8%27%2F%3E%3C%2Fsvg%3E">
 <link rel="apple-touch-icon" href="./icons/icon-192.png">
-<title>Dad’s Knee Routine · 7 minutes</title>
-<meta name="description" content="Seven gentle, timed knee-mobility exercises with English and Punjabi instructions, illustrations, and safety notes. General information, not medical advice.">
+<title>घुटनों की कसरत · 7 मिनट</title>
+<meta name="description" content="Seven gentle, timed knee-mobility exercises with an English/Hindi language toggle, illustrations, and safety notes. General information, not medical advice.">
   <style>
     :root { --ink:#17312d; --muted:#5f746e; --paper:#f5f2ea; --card:#fffdf8; --green:#136f63; --green-dark:#0c5149; --mint:#dcefe8; --gold:#d68b32; --red:#a33d35; --line:#dbe4dc; }
     * { box-sizing:border-box; }
@@ -334,42 +334,50 @@ section:nth-of-type(4),.card:nth-child(4),[class*="-card"]:nth-child(4){animatio
 @keyframes sharedRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 @keyframes sharedDrift{from{transform:translate3d(-1%,0,0) scale(1)}to{transform:translate3d(1.5%,1%,0) scale(1.05)}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+/* EN/HI language toggle — same pill style as the other family apps */
+.header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.lang-pill-group{display:flex;align-items:center;gap:.4rem}
+.lang-pill{padding:.45rem .85rem;border-radius:20px;border:1px solid #dce8ef;background:#fff;color:#102a43;font-size:.85rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:.3rem;transition:all .2s}
+.lang-pill.active{background:#0b8f83;color:#fff;border-color:#0b8f83;box-shadow:0 2px 6px rgba(11,143,131,.3)}
+.lang-pill.active-hi{background:#c2410c;color:#fff;border-color:#c2410c;box-shadow:0 2px 6px rgba(194,65,12,.3)}
+@media(max-width:560px){.header-actions{gap:6px}.lang-pill{padding:.4rem .65rem;font-size:.8rem}}
 </style>
 </head>
 <body>
   <main class="shell">
     <header class="topbar">
-      <div><div class="eyebrow">A gentle daily routine</div><h1>ਗੋਡਿਆਂ ਦੀ ਕਸਰਤ <span style="font-weight:500">· Knee routine</span></h1></div>
-      <button class="sound" id="soundToggle" type="button" aria-pressed="true">🔊 Voice on</button>
+      <div><div class="eyebrow" id="eyebrow">हल्की दैनिक दिनचर्या</div><h1 id="appTitle">घुटनों की कसरत</h1></div>
+      <div class="header-actions"><div class="lang-pill-group" role="group" aria-label="Language"><button class="lang-pill" id="pill-en" type="button">English</button><button class="lang-pill active-hi" id="pill-hi" type="button">हिन्दी</button></div><button class="sound" id="soundToggle" type="button" aria-pressed="true">🔊 आवाज़ चालू</button></div>
     </header>
 
     <section class="card" aria-live="polite">
-      <div class="meta"><span id="progressText">Exercise 1 of 7</span><span class="status" id="status">Ready · ਤਿਆਰ</span></div>
-      <div class="timer"><svg viewBox="0 0 240 240" aria-hidden="true"><circle class="ring-bg" cx="120" cy="120" r="106"></circle><circle class="ring" id="ring" cx="120" cy="120" r="106"></circle></svg><div class="clock"><div class="time" id="time">30</div><div class="seconds">seconds · ਸਕਿੰਟ</div></div></div>
-      <div class="visual" id="visual" aria-label="Exercise illustration"></div><div class="exercise"><h2 id="title">ਹਲਕੀ ਕਦਮਤਾਲ</h2><p class="english" id="english">Seated marching</p><p class="instructions" id="instructions">Sit tall, or stand with support. Slowly lift one knee, then the other.</p><div class="next" id="next">Next · ਅਗਲਾ: Seated leg straightening</div></div>
+      <div class="meta"><span id="progressText">कसरत 1 / 7</span><span class="status" id="status">तैयार</span></div>
+      <div class="timer"><svg viewBox="0 0 240 240" aria-hidden="true"><circle class="ring-bg" cx="120" cy="120" r="106"></circle><circle class="ring" id="ring" cx="120" cy="120" r="106"></circle></svg><div class="clock"><div class="time" id="time">30</div><div class="seconds" id="secondsLabel">सेकंड</div></div></div>
+      <div class="visual" id="visual" aria-label="Exercise illustration"></div><div class="exercise"><h2 id="title">बैठकर कदमताल</h2><p class="english" id="english" style="display:none">Seated marching</p><p class="instructions" id="instructions">कुर्सी पर बैठकर धीरे-धीरे एक-एक घुटना ऊपर उठाएं।</p><div class="next" id="next">अगला: बैठकर पैर सीधा करना</div></div>
       <div class="controls"><button class="control" id="prev" type="button" aria-label="Previous exercise">◀</button><button class="control primary" id="play" type="button" aria-label="Start workout">▶</button><button class="control" id="nextBtn" type="button" aria-label="Next exercise">▶</button><button class="control" id="reset" type="button" aria-label="Reset workout">↻</button></div>
     </section>
-    <section class="help"><div class="tip"><b>Move slowly</b>Gentle and controlled is better than fast.</div><div class="tip"><b>Easy effort</b>A little stretch is okay; sharp pain is not.</div><div class="tip"><b>Take breaks</b>Stop anytime and rest when needed.</div></section>
-    <p class="footer">This is general information, not a diagnosis or personal medical advice. Do not exercise through pain.</p>
+    <section class="help"><div class="tip" id="tip1"><b>धीरे चलें</b>हल्का और नियंत्रित बेहतर है, तेज़ नहीं।</div><div class="tip" id="tip2"><b>हल्का प्रयास</b>थोड़ा खिंचाव ठीक है; तेज दर्द नहीं।</div><div class="tip" id="tip3"><b>ब्रेक लें</b>कभी भी रुकें और ज़रूरत पर आराम करें।</div></section>
+    <p class="footer" id="footerText">यह सामान्य जानकारी है, निदान या व्यक्तिगत चिकित्सा सलाह नहीं। दर्द होने पर कसरत न करें।</p>
   </main>
     <div class="safety-modal" id="safetyModal" role="dialog" aria-modal="true" aria-labelledby="safetyTitle" hidden>
       <div class="safety-dialog">
-        <h2 id="safetyTitle">Safety first · ਸੁਰੱਖਿਆ ਪਹਿਲਾਂ</h2>
-        <p>Use a sturdy chair or counter for support. Stop if there is sharp pain, dizziness, chest pain, or a sudden increase in swelling. For eye exercises, do not press or rub your eyes. Stop for pain, flashing lights, new floaters, double vision, or sudden vision changes. Ask a doctor or physiotherapist/eye-care professional if this routine is suitable for you.</p>
-        <div class="safety-actions"><button class="safety-cancel" id="safetyCancel" type="button">Cancel</button><button class="safety-start" id="safetyStart" type="button">I understand · Start</button></div>
+        <h2 id="safetyTitle">सुरक्षा पहले</h2>
+        <p id="safetyText">मजबूत कुर्सी या काउंटर का सहारा लें। तेज दर्द, चक्कर, सीने में दर्द या सूजन अचानक बढ़ने पर रुक जाएं। आंखों की कसरत में आंखों को दबाएं या ज़ोर से रगड़ें नहीं। दर्द, चमक, नए धब्बे, दोहरी दृष्टि या अचानक दृष्टि बदलने पर रुकें। यह दिनचर्या आपके लिए उपयुक्त है या नहीं, डॉक्टर, फिजियोथेरेपिस्ट या नेत्र विशेषज्ञ से पूछें।</p>
+        <div class="safety-actions"><button class="safety-cancel" id="safetyCancel" type="button">रद्द करें</button><button class="safety-start" id="safetyStart" type="button">समझ गया · शुरू करें</button></div>
       </div>
     </div>
 
 
 <script>
 const WORKOUT=[
- {pa:'ਹਲਕੀ ਕਦਮਤਾਲ',en:'Seated marching',desc:'Sit tall, or stand with support. Slowly lift one knee, then the other.',voice:'कुर्सी पर बैठकर धीरे-धीरे एक-एक घुटना ऊपर उठाएं।',duration:30},
- {pa:'ਕੁਰਸੀ ’ਤੇ ਲੱਤ ਸਿੱਧੀ ਕਰਨਾ',en:'Seated leg straightening',desc:'Straighten one leg forward, hold gently for 3 seconds, then lower it with control.',voice:'कुर्सी पर बैठकर पैर सीधा करें, तीन सेकंड रोकें, फिर धीरे नीचे लाएं।',duration:40},
- {pa:'ਸਿੱਧੀ ਲੱਤ ਚੁੱਕਣਾ',en:'Straight-leg raise',desc:'Lying down, keep one leg straight and lift it a little. Lower it slowly.',voice:'लेटकर एक पैर सीधा रखें, थोड़ा ऊपर उठाएं और धीरे नीचे लाएं।',duration:40},
- {pa:'ਗੋਡਿਆਂ ਵਿਚਕਾਰ ਸਿਰਹਾਣਾ ਦਬਾਉਣਾ',en:'Pillow squeeze',desc:'Place a pillow between the knees. Gently squeeze for 5 seconds, then release.',voice:'घुटनों के बीच तकिया रखकर पांच सेकंड हल्का दबाएं, फिर छोड़ें।',duration:40},
- {pa:'ਅੱਡੀਆਂ ਚੁੱਕਣਾ',en:'Calf raises',desc:'Hold a sturdy chair. Rise onto your toes, then slowly lower your heels.',voice:'मजबूत कुर्सी पकड़कर पंजों पर उठें और एड़ियां धीरे नीचे लाएं।',duration:40},
- {pa:'ਲੱਤ ਪਿੱਛੇ ਮੋੜਨਾ',en:'Standing hamstring curl',desc:'Hold support. Bend one knee so the heel moves back, then lower slowly.',voice:'सहारा लेकर घुटने को मोड़ें और एड़ी पीछे ले जाएं, फिर धीरे नीचे लाएं।',duration:40},
- {pa:'ਹਲਕਾ ਸਟ੍ਰੈਚ ਅਤੇ ਆਰਾਮ',en:'Gentle stretch and rest',desc:'Sit comfortably, relax your legs, and take slow, comfortable breaths.',voice:'आराम से बैठें, पैरों को ढीला छोड़ें और धीरे-धीरे सांस लें।',duration:30}
+ {pa:'ਹਲਕੀ ਕਦਮਤਾਲ',en:'Seated marching',titleHi:'बैठकर कदमताल',desc:'Sit tall, or stand with support. Slowly lift one knee, then the other.',voice:'कुर्सी पर बैठकर धीरे-धीरे एक-एक घुटना ऊपर उठाएं।',duration:30},
+ {pa:'ਕੁਰਸੀ ’ਤੇ ਲੱਤ ਸਿੱਧੀ ਕਰਨਾ',en:'Seated leg straightening',titleHi:'बैठकर पैर सीधा करना',desc:'Straighten one leg forward, hold gently for 3 seconds, then lower it with control.',voice:'कुर्सी पर बैठकर पैर सीधा करें, तीन सेकंड रोकें, फिर धीरे नीचे लाएं।',duration:40},
+ {pa:'ਸਿੱਧੀ ਲੱਤ ਚੁੱਕਣਾ',en:'Straight-leg raise',titleHi:'सीधी टांग उठाना',desc:'Lying down, keep one leg straight and lift it a little. Lower it slowly.',voice:'लेटकर एक पैर सीधा रखें, थोड़ा ऊपर उठाएं और धीरे नीचे लाएं।',duration:40},
+ {pa:'ਗੋਡਿਆਂ ਵਿਚਕਾਰ ਸਿਰਹਾਣਾ ਦਬਾਉਣਾ',en:'Pillow squeeze',titleHi:'घुटनों के बीच तकिया दबाना',desc:'Place a pillow between the knees. Gently squeeze for 5 seconds, then release.',voice:'घुटनों के बीच तकिया रखकर पांच सेकंड हल्का दबाएं, फिर छोड़ें।',duration:40},
+ {pa:'ਅੱਡੀਆਂ ਚੁੱਕਣਾ',en:'Calf raises',titleHi:'एड़ियां उठाना',desc:'Hold a sturdy chair. Rise onto your toes, then slowly lower your heels.',voice:'मजबूत कुर्सी पकड़कर पंजों पर उठें और एड़ियां धीरे नीचे लाएं।',duration:40},
+ {pa:'ਲੱਤ ਪਿੱਛੇ ਮੋੜਨਾ',en:'Standing hamstring curl',titleHi:'खड़े होकर हैमस्ट्रिंग मोड़ना',desc:'Hold support. Bend one knee so the heel moves back, then lower slowly.',voice:'सहारा लेकर घुटने को मोड़ें और एड़ी पीछे ले जाएं, फिर धीरे नीचे लाएं।',duration:40},
+ {pa:'ਹਲਕਾ ਸਟ੍ਰੈਚ ਅਤੇ ਆਰਾਮ',en:'Gentle stretch and rest',titleHi:'हल्का खिंचाव और आराम',desc:'Sit comfortably, relax your legs, and take slow, comfortable breaths.',voice:'आराम से बैठें, पैरों को ढीला छोड़ें और धीरे-धीरे सांस लें।',duration:30}
 ];
 const GRAPHICS=['./assets/man-seated-marching.webp', './assets/man-seated-leg-straightening.webp', './assets/man-straight-leg-raise.webp', './assets/man-pillow-squeeze.webp', './assets/man-calf-raises.webp', './assets/man-standing-hamstring-curl.webp', './assets/man-gentle-stretch-rest.webp'];
 const GRAPHIC_LABELS=['Seated marching illustration','Seated leg straightening illustration','Straight leg raise illustration','Pillow squeeze illustration','Calf raises illustration','Standing hamstring curl illustration','Gentle stretch and rest illustration'];
@@ -378,17 +386,103 @@ const REST=15, C=2*Math.PI*106; let i=0,rest=false,left=WORKOUT[0].duration,tota
 const $=id=>document.getElementById(id), ring=$('ring'); ring.style.strokeDasharray=C+' '+C;
 function audioStart(){try{audio??=new(window.AudioContext||window.webkitAudioContext)();audio.resume()}catch(e){}}
 function beep(f=650,d=.12){if(!sound)return;try{audioStart();let o=audio.createOscillator(),g=audio.createGain();o.connect(g);g.connect(audio.destination);o.frequency.value=f;g.gain.setValueAtTime(.12,audio.currentTime);g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+d);o.start();o.stop(audio.currentTime+d)}catch(e){}}
-function nativeSpeak(text){if(!('speechSynthesis'in window))return; speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(text);u.lang='hi-IN';u.rate=.88;speechSynthesis.speak(u)}
-function speak(text){if(!sound)return; nativeSpeak(text)}
-function render(){let w=WORKOUT[i],art=done||rest?REST_ART:GRAPHICS[i];$('visual').innerHTML=`<picture><source srcset="${art}" type="image/webp"><img src="${art.replace(/\.webp$/,'.png')}" alt="${done||rest?'Rest illustration':GRAPHIC_LABELS[i]}"></picture>`;$('time').textContent=String(left).padStart(2,'0');ring.style.strokeDashoffset=C-(left/total)*C;$('progressText').textContent=done?'7 / 7 complete':`Exercise ${i+1} of 7`;
- if(done){$('status').textContent='Complete · ਮੁਕੰਮਲ';$('status').className='status done';$('title').textContent='ਸ਼ਾਬਾਸ਼! ਰੁਟੀਨ ਪੂਰੀ ਹੋ ਗਈ';$('english').textContent='Well done — take a rest';$('instructions').textContent='You finished today’s routine. Drink some water and relax.';$('next').textContent='Press ▶ to start again';$('time').textContent='00';ring.style.strokeDashoffset=0;return}
- if(rest){$('status').textContent=running?'Rest · ਆਰਾਮ':'Rest · ਆਰਾਮ';$('status').className='status rest';$('title').textContent='ਸਾਹ ਲਓ ਅਤੇ ਆਰਾਮ ਕਰੋ';$('english').textContent='Get ready for the next exercise';$('instructions').textContent='Breathe comfortably and prepare. Continue only if you feel okay.';$('next').textContent='Next · ਅਗਲਾ: '+w.en;ring.style.stroke='var(--gold)'}else{$('status').textContent=running?'Moving · ਕਸਰਤ':'Ready · ਤਿਆਰ';$('status').className='status';$('title').textContent=w.pa;$('english').textContent=w.en;$('instructions').textContent=w.desc;$('next').textContent=i<6?'Next · ਅਗਲਾ: '+WORKOUT[i+1].en:'Last exercise · ਆਖ਼ਰੀ ਕਸਰਤ';ring.style.stroke='var(--green)'} $('play').textContent=running?'Ⅱ':'▶';}
+/* Language: 'en' or 'hi' (default Hindi, persisted). Display and speech both
+   follow the toggle. English speaks with Phonon 31M by default; Hindi uses
+   the device's native hi-IN voice. The Punjabi `pa` field stays in the data
+   but is never displayed in either mode. */
+let lang = localStorage.getItem('knee_lang') || 'hi';
+const STRINGS = {
+  en: {
+    eyebrow:'A gentle daily routine', title:'Knee routine', seconds:'seconds',
+    ready:'Ready', moving:'Moving', rest:'Rest', complete:'Complete',
+    next:'Next', lastExercise:'Last exercise', pressRestart:'Press ▶ to start again',
+    restTitle:'Breathe and rest', restSub:'Get ready for the next exercise',
+    restDesc:'Breathe comfortably and prepare. Continue only if you feel okay.',
+    restPrefix:'Rest. Next exercise: ',
+    doneTitle:'Well done! Routine complete', doneSub:'Well done — take a rest',
+    doneDesc:'You finished today’s routine. Drink some water and relax.',
+    completeSpeak:'Well done! Today’s routine is complete.',
+    progress:n=>`Exercise ${n} of 7`, progressDone:'7 / 7 complete',
+    voiceOn:'🔊 Voice on', voiceOff:'🔇 Voice off',
+    tip1:['Move slowly','Gentle and controlled is better than fast.'],
+    tip2:['Easy effort','A little stretch is okay; sharp pain is not.'],
+    tip3:['Take breaks','Stop anytime and rest when needed.'],
+    footer:'This is general information, not a diagnosis or personal medical advice. Do not exercise through pain.',
+    safetyTitle:'Safety first',
+    safetyText:'Use a sturdy chair or counter for support. Stop if there is sharp pain, dizziness, chest pain, or a sudden increase in swelling. For eye exercises, do not press or rub your eyes. Stop for pain, flashing lights, new floaters, double vision, or sudden vision changes. Ask a doctor or physiotherapist/eye-care professional if this routine is suitable for you.',
+    safetyCancel:'Cancel', safetyStart:'I understand · Start'
+  },
+  hi: {
+    eyebrow:'हल्की दैनिक दिनचर्या', title:'घुटनों की कसरत', seconds:'सेकंड',
+    ready:'तैयार', moving:'कसरत', rest:'आराम', complete:'मुकम्मल',
+    next:'अगला', lastExercise:'आख़री कसरत', pressRestart:'फिर से शुरू करने के लिए ▶ दबाएं',
+    restTitle:'सांस लें और आराम करें', restSub:'अगली कसरत के लिए तैयार रहें',
+    restDesc:'आराम से सांस लें और तैयार रहें। ठीक लगे तभी आगे बढ़ें।',
+    restPrefix:'आराम करें। अगली कसरत: ',
+    doneTitle:'शाबाश! रूटीन पूरी हो गई', doneSub:'शाबाश — आराम करें',
+    doneDesc:'आज की रूटीन पूरी हो गई। थोड़ा पानी पिएं और आराम करें।',
+    completeSpeak:'शाबाश! आज की कसरत पूरी हो गई।',
+    progress:n=>`कसरत ${n} / 7`, progressDone:'7 / 7 पूरी',
+    voiceOn:'🔊 आवाज़ चालू', voiceOff:'🔇 आवाज़ बंद',
+    tip1:['धीरे चलें','हल्का और नियंत्रित बेहतर है, तेज़ नहीं।'],
+    tip2:['हल्का प्रयास','थोड़ा खिंचाव ठीक है; तेज दर्द नहीं।'],
+    tip3:['ब्रेक लें','कभी भी रुकें और ज़रूरत पर आराम करें।'],
+    footer:'यह सामान्य जानकारी है, निदान या व्यक्तिगत चिकित्सा सलाह नहीं। दर्द होने पर कसरत न करें।',
+    safetyTitle:'सुरक्षा पहले',
+    safetyText:'मजबूत कुर्सी या काउंटर का सहारा लें। तेज दर्द, चक्कर, सीने में दर्द या सूजन अचानक बढ़ने पर रुक जाएं। आंखों की कसरत में आंखों को दबाएं या ज़ोर से रगड़ें नहीं। दर्द, चमक, नए धब्बे, दोहरी दृष्टि या अचानक दृष्टि बदलने पर रुकें। यह दिनचर्या आपके लिए उपयुक्त है या नहीं, डॉक्टर, फिजियोथेरेपिस्ट या नेत्र विशेषज्ञ से पूछें।',
+    safetyCancel:'रद्द करें', safetyStart:'समझ गया · शुरू करें'
+  }
+};
+function applyLang(){
+  document.documentElement.lang = lang === 'hi' ? 'hi' : 'en';
+  document.title = lang === 'hi' ? 'घुटनों की कसरत · 7 मिनट' : 'Dad’s Knee Routine · 7 minutes';
+  $('pill-en').className = 'lang-pill' + (lang === 'en' ? ' active' : '');
+  $('pill-hi').className = 'lang-pill' + (lang === 'hi' ? ' active-hi' : '');
+  const S = STRINGS[lang];
+  $('eyebrow').textContent = S.eyebrow;
+  $('appTitle').textContent = S.title;
+  $('secondsLabel').textContent = S.seconds;
+  $('tip1').innerHTML = '<b>'+S.tip1[0]+'</b>'+S.tip1[1];
+  $('tip2').innerHTML = '<b>'+S.tip2[0]+'</b>'+S.tip2[1];
+  $('tip3').innerHTML = '<b>'+S.tip3[0]+'</b>'+S.tip3[1];
+  $('footerText').textContent = S.footer;
+  $('safetyTitle').textContent = S.safetyTitle;
+  $('safetyText').textContent = S.safetyText;
+  $('safetyCancel').textContent = S.safetyCancel;
+  $('safetyStart').textContent = S.safetyStart;
+  updateSoundBtn();
+  localStorage.setItem('knee_lang', lang);
+  render();
+}
+function updateSoundBtn(){ $('soundToggle').textContent = sound ? STRINGS[lang].voiceOn : STRINGS[lang].voiceOff; }
+function setLang(l){ if(l === lang) return; lang = l; stopAllSpeech(); applyLang(); if(lang === 'en') loadPhonon().catch(()=>{}); }
+function nextTitle(){ const n = WORKOUT[i+1]; return lang === 'hi' ? n.titleHi : n.en; }
+function nativeSpeakHi(text){if(!('speechSynthesis'in window))return; speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(text);u.lang='hi-IN';u.rate=.88;let v=speechSynthesis.getVoices().find(x=>x.lang&&x.lang.toLowerCase().indexOf('hi')===0);if(v)u.voice=v;speechSynthesis.speak(u)}
+function nativeSpeakEn(text){if(!('speechSynthesis'in window))return; speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(text);u.lang='en-US';u.rate=1;speechSynthesis.speak(u)}
+/* Phonon 31M English voice (vendored runtime). English speaks with Phonon by
+   default; the ~35 MB voice downloads once on first English use and is cached
+   by the Phonon runtime in its own Cache API bucket ('phonon-tts-v1'), then
+   works offline. If Phonon fails to load, English falls back to the native
+   voice. Same engine as the books-for-dad app. */
+let phononTts=null, phononVoice=null, phononFailed=false;
+let phononAudio=null, phononGain=null, phononSources=[], phononLastEnd=0;
+let phononRunToken=0, phononAbort=null;
+function ensurePhononAudio(){ if(!phononAudio){ phononAudio=new (window.AudioContext||window.webkitAudioContext)(); phononGain=phononAudio.createGain(); phononGain.gain.value=1; phononGain.connect(phononAudio.destination); } if(phononAudio.state==='suspended') void phononAudio.resume(); }
+async function loadPhonon(){ if(phononTts||phononFailed) return phononTts; ensurePhononAudio(); try{ const {PhononTTS}=await import('./vendor/phonon-tts/index.js'); phononTts=await PhononTTS.load({lang:'en',device:'auto',quant:'q8'}); phononVoice=phononTts.voices[0]; return phononTts; }catch(e){ console.error('Phonon load failed, falling back to device voice',e); phononFailed=true; return null; } }
+async function playPhononSentence(text,myToken){ const engine=await loadPhonon(); if(!engine) throw new Error('Phonon unavailable'); if(myToken!==phononRunToken) return 'stopped'; ensurePhononAudio(); const parts=text.match(/[^.!?]+[.!?]+["']?|\S[^.!?]*$/g)?.map(s=>s.trim()).filter(Boolean)||[text]; try{ for(const part of parts){ if(myToken!==phononRunToken) return 'stopped'; phononAbort=new AbortController(); const stream=phononTts.stream(part,{voice:phononVoice,signal:phononAbort.signal}); let cursor=Math.max(phononAudio.currentTime,phononLastEnd); for await(const pcm of stream){ if(myToken!==phononRunToken) return 'stopped'; const buf=phononAudio.createBuffer(1,pcm.length,phononTts.sampleRate); buf.getChannelData(0).set(pcm); const src=phononAudio.createBufferSource(); src.buffer=buf; src.playbackRate.value=1; src.connect(phononGain); phononSources.push(src); src.onended=()=>{const idx=phononSources.indexOf(src); if(idx>=0) phononSources.splice(idx,1);}; cursor=Math.max(cursor,phononAudio.currentTime); src.start(cursor); cursor+=buf.duration; } await stream.done.catch(()=>{}); phononLastEnd=cursor; const waitMs=Math.max(0,(cursor-phononAudio.currentTime)*1000); await new Promise(r=>setTimeout(r,waitMs+250)); } }finally{ phononAbort=null; } return myToken!==phononRunToken?'stopped':'done'; }
+function stopPhonon(){ phononRunToken++; try{ if(phononAbort) phononAbort.abort(); }catch(e){} phononSources.splice(0).forEach(s=>{ try{ s.stop(); }catch(e){} }); }
+function stopAllSpeech(){ try{ speechSynthesis.cancel(); }catch(e){} stopPhonon(); }
+function speak(text){ if(!sound) return; if(lang==='hi'){ stopAllSpeech(); nativeSpeakHi(text); } else { stopAllSpeech(); const myToken=phononRunToken; playPhononSentence(text,myToken).catch(()=>{ if(myToken===phononRunToken) nativeSpeakEn(text); }); } }
+function say(enText,hiText){ speak(lang==='hi'?hiText:enText); }
+function render(){let w=WORKOUT[i],art=done||rest?REST_ART:GRAPHICS[i];$('visual').innerHTML=`<picture><source srcset="${art}" type="image/webp"><img src="${art.replace(/\.webp$/,'.png')}" alt="${done||rest?'Rest illustration':GRAPHIC_LABELS[i]}"></picture>`;$('time').textContent=String(left).padStart(2,'0');ring.style.strokeDashoffset=C-(left/total)*C;const S=STRINGS[lang];$('progressText').textContent=done?S.progressDone:S.progress(i+1);
+ if(done){$('status').textContent=S.complete;$('status').className='status done';$('title').textContent=S.doneTitle;$('english').textContent=S.doneSub;$('english').style.display='';$('instructions').textContent=S.doneDesc;$('next').textContent=S.pressRestart;$('time').textContent='00';ring.style.strokeDashoffset=0;return}
+ if(rest){$('status').textContent=S.rest;$('status').className='status rest';$('title').textContent=S.restTitle;$('english').textContent=S.restSub;$('english').style.display='';$('instructions').textContent=S.restDesc;$('next').textContent=S.next+': '+nextTitle();ring.style.stroke='var(--gold)'}else{$('status').textContent=running?S.moving:S.ready;$('status').className='status';$('title').textContent=lang==='hi'?w.titleHi:w.en;$('english').style.display='none';$('instructions').textContent=lang==='hi'?w.voice:w.desc;$('next').textContent=i<6?S.next+': '+nextTitle():S.lastExercise;ring.style.stroke='var(--green)'} $('play').textContent=running?'Ⅱ':'▶';}
 function stop(){clearInterval(timer);timer=null;running=false}
-function start(){audioStart();if(done){reset();return}running=true;render();if(left===total)speak(rest?'आराम करें। अगली कसरत: '+WORKOUT[i].voice:WORKOUT[i].voice);timer=setInterval(()=>{if(left>0){if(left<=3)beep(800);left--;render()}else{beep(1100,.22);if(!rest&&i<6){rest=true;left=total=REST;speak('आराम करें। अगली कसरत: '+WORKOUT[i+1].voice)}else if(rest){i++;rest=false;left=total=WORKOUT[i].duration;speak(WORKOUT[i].voice)}else{stop();done=true;speak('शाबाश! आज की कसरत पूरी हो गई।')}render()}},1000)}
+function start(){audioStart();if(done){reset();return}running=true;render();if(left===total)say(rest?STRINGS.en.restPrefix+WORKOUT[i+1].desc:WORKOUT[i].desc,rest?STRINGS.hi.restPrefix+WORKOUT[i+1].voice:WORKOUT[i].voice);timer=setInterval(()=>{if(left>0){if(left<=3)beep(800);left--;render()}else{beep(1100,.22);if(!rest&&i<6){rest=true;left=total=REST;say(STRINGS.en.restPrefix+WORKOUT[i+1].desc,STRINGS.hi.restPrefix+WORKOUT[i+1].voice)}else if(rest){i++;rest=false;left=total=WORKOUT[i].duration;say(WORKOUT[i].desc,WORKOUT[i].voice)}else{stop();done=true;say(STRINGS.en.completeSpeak,STRINGS.hi.completeSpeak)}render()}},1000)}
 function toggle(){if(running){stop();render()}else start()}
 function reset(){stop();i=0;rest=false;done=false;left=total=WORKOUT[0].duration;render()}
 function step(dir){stop();done=false;if(dir>0){if(rest){rest=false;left=total=WORKOUT[i].duration}else if(i<6){i++;left=total=WORKOUT[i].duration}else{done=true;left=0}}else{if(rest){rest=false;left=total=WORKOUT[i].duration}else if(i>0){i--;left=total=WORKOUT[i].duration}else left=total=WORKOUT[0].duration}render()}
-let confirmed=false;const safetyModal=$('safetyModal');function requestStart(){if(!running&&!done&&!confirmed){safetyModal.hidden=false;$('safetyStart').focus();return}toggle()}$('safetyStart').onclick=()=>{confirmed=true;safetyModal.hidden=true;start()};$('safetyCancel').onclick=()=>{safetyModal.hidden=true;$('play').focus()};$('play').onclick=requestStart;$('reset').onclick=reset;$('nextBtn').onclick=()=>step(1);$('prev').onclick=()=>step(-1);$('soundToggle').onclick=()=>{sound=!sound;$('soundToggle').textContent=sound?'🔊 Voice on':'🔇 Voice off';$('soundToggle').setAttribute('aria-pressed',sound);if(!sound){speechSynthesis?.cancel()}};render();
+let confirmed=false;const safetyModal=$('safetyModal');function requestStart(){if(!running&&!done&&!confirmed){safetyModal.hidden=false;$('safetyStart').focus();return}toggle()}$('safetyStart').onclick=()=>{confirmed=true;safetyModal.hidden=true;start()};$('safetyCancel').onclick=()=>{safetyModal.hidden=true;$('play').focus()};$('play').onclick=requestStart;$('reset').onclick=reset;$('nextBtn').onclick=()=>step(1);$('prev').onclick=()=>step(-1);$('soundToggle').onclick=()=>{sound=!sound;updateSoundBtn();$('soundToggle').setAttribute('aria-pressed',sound);if(!sound){stopAllSpeech()}};$('pill-en').onclick=()=>setLang('en');$('pill-hi').onclick=()=>setLang('hi');applyLang();
 </script>
 
 <script>
@@ -396,6 +490,7 @@ let confirmed=false;const safetyModal=$('safetyModal');function requestStart(){i
 (function () {
   function cancelSpeech() {
     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    if (typeof stopPhonon === 'function') stopPhonon();
   }
   document.addEventListener('visibilitychange', function () {
     if (document.visibilityState === 'hidden' && typeof running !== 'undefined' && running) {
