@@ -1,4 +1,4 @@
-const CACHE_NAME = 'knee-routine-v5';
+const CACHE_NAME = 'knee-routine-v6';
 const APP_SHELL = [
   './',
   './index.html',

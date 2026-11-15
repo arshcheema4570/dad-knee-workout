@@ -377,7 +377,7 @@ async function loadTTS(){
       const {KokoroTTS,env,setVoiceDataUrl}=await import('./vendor/kokoro/kokoro-hindi.web.js');
       env.allowLocalModels=true;
       env.allowRemoteModels=false;
-      env.wasmPaths='./vendor/ort/';
+      env.wasmPaths = new URL('./vendor/ort/', document.baseURI).href; // absolute: a relative string resolves against the bundle folder (vendor/kokoro/) in dynamic imports, 404ing the jsep .mjs
       setVoiceDataUrl('./models/Kokoro-82M-v1.0-ONNX/voices');
       kokoroTTS=await KokoroTTS.from_pretrained('./models/Kokoro-82M-v1.0-ONNX',{dtype:'q8',device:'wasm'});
       return kokoroTTS;
