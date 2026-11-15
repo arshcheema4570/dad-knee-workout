@@ -13,6 +13,9 @@
 <link rel="apple-touch-icon" href="./icons/icon-192.png">
 <title>Dad’s Knee Routine · 7 minutes</title>
 <meta name="description" content="Seven gentle, timed knee-mobility exercises with English and Punjabi instructions, illustrations, and safety notes. General information, not medical advice.">
+<script type="importmap">
+{"imports":{"espeak-ng":"./vendor/espeak-ng/espeak-ng.js"}}
+</script>
   <style>
     :root { --ink:#17312d; --muted:#5f746e; --paper:#f5f2ea; --card:#fffdf8; --green:#136f63; --green-dark:#0c5149; --mint:#dcefe8; --gold:#d68b32; --red:#a33d35; --line:#dbe4dc; }
     * { box-sizing:border-box; }
@@ -360,6 +363,73 @@ section:nth-of-type(4),.card:nth-child(4),[class*="-card"]:nth-child(4){animatio
       </div>
     </div>
 
+<script type="module">
+/* Offline Kokoro-82M Hindi voice (female hf_alpha), lazy-loaded on first use.
+   eSpeak-NG is GPL-3.0 — see vendor/espeak-ng/LICENSE-espeak-ng.
+   If Kokoro fails to load/generate, speak() in the classic script below falls
+   back to native speechSynthesis — the user is never left with no voice. */
+let kokoroTTS=null, kokoroLoadPromise=null, kokoroCtx=null, kokoroCurrentSource=null, kokoroToken=0, kokoroQueue=Promise.resolve();
+const KOKORO_VOICE='hf_alpha';
+async function loadTTS(){
+  if(kokoroTTS) return kokoroTTS;
+  if(!kokoroLoadPromise){
+    kokoroLoadPromise=(async()=>{
+      const {KokoroTTS,env,setVoiceDataUrl}=await import('./vendor/kokoro/kokoro-hindi.web.js');
+      env.allowLocalModels=true;
+      env.allowRemoteModels=false;
+      env.wasmPaths='./vendor/ort/';
+      setVoiceDataUrl('./models/Kokoro-82M-v1.0-ONNX/voices');
+      kokoroTTS=await KokoroTTS.from_pretrained('./models/Kokoro-82M-v1.0-ONNX',{dtype:'q8',device:'wasm'});
+      return kokoroTTS;
+    })();
+  }
+  try{ return await kokoroLoadPromise; }
+  catch(e){ kokoroLoadPromise=null; kokoroTTS=null; throw e; }
+}
+function kokoroAudioCtx(){
+  if(!kokoroCtx) kokoroCtx=new (window.AudioContext||window.webkitAudioContext)();
+  if(kokoroCtx.state==='suspended') kokoroCtx.resume().catch(()=>{});
+  return kokoroCtx;
+}
+function kokoroStopPlayback(){ try{ if(kokoroCurrentSource) kokoroCurrentSource.stop(); }catch(e){} }
+function kokoroPlay(audio,sampling_rate){
+  const ac=kokoroAudioCtx();
+  const buf=ac.createBuffer(1,audio.length,sampling_rate);
+  buf.copyToChannel(audio,0);
+  const src=ac.createBufferSource();
+  src.buffer=buf; src.connect(ac.destination);
+  kokoroCurrentSource=src;
+  return new Promise((resolve)=>{ src.onended=()=>{ if(kokoroCurrentSource===src) kokoroCurrentSource=null; resolve(); }; src.start(); });
+}
+function kokoroSplitSentences(text){
+  const parts=text.split(/(?<=[।.!?])\s+/).map((s)=>s.trim()).filter(Boolean);
+  return parts.length?parts:[text];
+}
+async function kokoroSpeakRun(text,token){
+  const engine=await loadTTS();
+  if(token!==kokoroToken) return true;
+  const sentences=kokoroSplitSentences(text);
+  for(const sentence of sentences){
+    if(token!==kokoroToken) return true;
+    const {audio,sampling_rate}=await engine.generate(sentence,{voice:KOKORO_VOICE});
+    if(token!==kokoroToken) return true;
+    await kokoroPlay(audio,sampling_rate);
+    if(token!==kokoroToken) return true;
+  }
+  return true;
+}
+function kokoroSpeak(text){
+  const token=++kokoroToken;
+  kokoroStopPlayback();
+  const run=kokoroQueue.then(()=>kokoroSpeakRun(text,token));
+  kokoroQueue=run.then(()=>{},()=>{});
+  return run.then(()=>true,(e)=>{ console.warn('[kokoro] TTS failed, falling back to native speech',e); return false; });
+}
+window.__kokoroSpeak=kokoroSpeak;
+window.__kokoroWarmup=()=>{ loadTTS().catch(()=>{}); };
+window.__kokoroCancel=()=>{ kokoroToken++; kokoroStopPlayback(); };
+</script>
+
 <script>
 const WORKOUT=[
  {pa:'ਹਲਕੀ ਕਦਮਤਾਲ',en:'Seated marching',desc:'Sit tall, or stand with support. Slowly lift one knee, then the other.',voice:'कुर्सी पर बैठकर धीरे-धीरे एक-एक घुटना ऊपर उठाएं।',duration:30},
@@ -377,22 +447,25 @@ const REST=15, C=2*Math.PI*106; let i=0,rest=false,left=WORKOUT[0].duration,tota
 const $=id=>document.getElementById(id), ring=$('ring'); ring.style.strokeDasharray=C+' '+C;
 function audioStart(){try{audio??=new(window.AudioContext||window.webkitAudioContext)();audio.resume()}catch(e){}}
 function beep(f=650,d=.12){if(!sound)return;try{audioStart();let o=audio.createOscillator(),g=audio.createGain();o.connect(g);g.connect(audio.destination);o.frequency.value=f;g.gain.setValueAtTime(.12,audio.currentTime);g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+d);o.start();o.stop(audio.currentTime+d)}catch(e){}}
-function speak(text){if(!sound||!('speechSynthesis'in window))return; speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(text);u.lang='hi-IN';u.rate=.88;speechSynthesis.speak(u)}
+function nativeSpeak(text){if(!('speechSynthesis'in window))return; speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(text);u.lang='hi-IN';u.rate=.88;speechSynthesis.speak(u)}
+function speak(text){if(!sound)return; if(window.__kokoroSpeak){window.__kokoroSpeak(text).then(function(ok){if(!ok)nativeSpeak(text)}).catch(function(){nativeSpeak(text)}); return} nativeSpeak(text)}
+function kokoroWarmup(){if(sound&&window.__kokoroWarmup)window.__kokoroWarmup()}
 function render(){let w=WORKOUT[i],art=done||rest?REST_ART:GRAPHICS[i];$('visual').innerHTML=`<picture><source srcset="${art}" type="image/webp"><img src="${art.replace(/\.webp$/,'.png')}" alt="${done||rest?'Rest illustration':GRAPHIC_LABELS[i]}"></picture>`;$('time').textContent=String(left).padStart(2,'0');ring.style.strokeDashoffset=C-(left/total)*C;$('progressText').textContent=done?'7 / 7 complete':`Exercise ${i+1} of 7`;
  if(done){$('status').textContent='Complete · ਮੁਕੰਮਲ';$('status').className='status done';$('title').textContent='ਸ਼ਾਬਾਸ਼! ਰੁਟੀਨ ਪੂਰੀ ਹੋ ਗਈ';$('english').textContent='Well done — take a rest';$('instructions').textContent='You finished today’s routine. Drink some water and relax.';$('next').textContent='Press ▶ to start again';$('time').textContent='00';ring.style.strokeDashoffset=0;return}
  if(rest){$('status').textContent=running?'Rest · ਆਰਾਮ':'Rest · ਆਰਾਮ';$('status').className='status rest';$('title').textContent='ਸਾਹ ਲਓ ਅਤੇ ਆਰਾਮ ਕਰੋ';$('english').textContent='Get ready for the next exercise';$('instructions').textContent='Breathe comfortably and prepare. Continue only if you feel okay.';$('next').textContent='Next · ਅਗਲਾ: '+w.en;ring.style.stroke='var(--gold)'}else{$('status').textContent=running?'Moving · ਕਸਰਤ':'Ready · ਤਿਆਰ';$('status').className='status';$('title').textContent=w.pa;$('english').textContent=w.en;$('instructions').textContent=w.desc;$('next').textContent=i<6?'Next · ਅਗਲਾ: '+WORKOUT[i+1].en:'Last exercise · ਆਖ਼ਰੀ ਕਸਰਤ';ring.style.stroke='var(--green)'} $('play').textContent=running?'Ⅱ':'▶';}
 function stop(){clearInterval(timer);timer=null;running=false}
-function start(){audioStart();if(done){reset();return}running=true;render();if(left===total)speak(rest?'आराम करें। अगली कसरत: '+WORKOUT[i].voice:WORKOUT[i].voice);timer=setInterval(()=>{if(left>0){if(left<=3)beep(800);left--;render()}else{beep(1100,.22);if(!rest&&i<6){rest=true;left=total=REST;speak('आराम करें। अगली कसरत: '+WORKOUT[i+1].voice)}else if(rest){rest=false;left=total=WORKOUT[i].duration;speak(WORKOUT[i].voice)}else{stop();done=true;speak('शाबाश! आज की कसरत पूरी हो गई।')}render()}},1000)}
+function start(){audioStart();kokoroWarmup();if(done){reset();return}running=true;render();if(left===total)speak(rest?'आराम करें। अगली कसरत: '+WORKOUT[i].voice:WORKOUT[i].voice);timer=setInterval(()=>{if(left>0){if(left<=3)beep(800);left--;render()}else{beep(1100,.22);if(!rest&&i<6){rest=true;left=total=REST;speak('आराम करें। अगली कसरत: '+WORKOUT[i+1].voice)}else if(rest){rest=false;left=total=WORKOUT[i].duration;speak(WORKOUT[i].voice)}else{stop();done=true;speak('शाबाश! आज की कसरत पूरी हो गई।')}render()}},1000)}
 function toggle(){if(running){stop();render()}else start()}
 function reset(){stop();i=0;rest=false;done=false;left=total=WORKOUT[0].duration;render()}
 function step(dir){stop();done=false;if(dir>0){if(rest){rest=false;left=total=WORKOUT[i].duration}else if(i<6){i++;left=total=WORKOUT[i].duration}else{done=true;left=0}}else{if(rest){rest=false;left=total=WORKOUT[i].duration}else if(i>0){i--;left=total=WORKOUT[i].duration}else left=total=WORKOUT[0].duration}render()}
-let confirmed=false;const safetyModal=$('safetyModal');function requestStart(){if(!running&&!done&&!confirmed){safetyModal.hidden=false;$('safetyStart').focus();return}toggle()}$('safetyStart').onclick=()=>{confirmed=true;safetyModal.hidden=true;start()};$('safetyCancel').onclick=()=>{safetyModal.hidden=true;$('play').focus()};$('play').onclick=requestStart;$('reset').onclick=reset;$('nextBtn').onclick=()=>step(1);$('prev').onclick=()=>step(-1);$('soundToggle').onclick=()=>{sound=!sound;$('soundToggle').textContent=sound?'🔊 Voice on':'🔇 Voice off';$('soundToggle').setAttribute('aria-pressed',sound);if(!sound)speechSynthesis?.cancel()};render();
+let confirmed=false;const safetyModal=$('safetyModal');function requestStart(){if(!running&&!done&&!confirmed){safetyModal.hidden=false;$('safetyStart').focus();return}toggle()}$('safetyStart').onclick=()=>{confirmed=true;safetyModal.hidden=true;start()};$('safetyCancel').onclick=()=>{safetyModal.hidden=true;$('play').focus()};$('play').onclick=requestStart;$('reset').onclick=reset;$('nextBtn').onclick=()=>step(1);$('prev').onclick=()=>step(-1);$('soundToggle').onclick=()=>{sound=!sound;$('soundToggle').textContent=sound?'🔊 Voice on':'🔇 Voice off';$('soundToggle').setAttribute('aria-pressed',sound);if(!sound){if(window.__kokoroCancel)window.__kokoroCancel();speechSynthesis?.cancel()}else kokoroWarmup()};render();
 </script>
 
 <script>
 /* Defensive mobile behavior: pause when backgrounded and resume cleanly after a browser return. */
 (function () {
   function cancelSpeech() {
+    if (window.__kokoroCancel) window.__kokoroCancel();
     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   }
   document.addEventListener('visibilitychange', function () {
