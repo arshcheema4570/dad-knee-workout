@@ -9,7 +9,7 @@ A gentle, illustrated knee-mobility routine PWA made for family use, with seven 
 - Seven illustrated exercises with Punjabi and English labels and instructions.
 - Start/pause, previous/next, reset, and voice controls.
 - Installable PWA with an offline app shell and exercise illustrations.
-- No account required. Voice announcements use an offline Kokoro-82M Hindi voice (female, `hf_alpha`) vendored in the repo — about 137 MB downloads once on first voice use, then works offline; if it fails to load, the app falls back to the device's built-in Hindi speech.
+- No account required. Voice announcements use the device's built-in Hindi speech (`hi-IN`), with no model download.
 
 ## Use and install
 
@@ -29,4 +29,4 @@ This routine is general information, not a diagnosis or personal medical advice.
 
 ## License
 
-The HTML, CSS, and JavaScript code is licensed under the [MIT License](LICENSE). The vendored eSpeak-NG files under `vendor/espeak-ng/` are GPL-3.0 (see `vendor/espeak-ng/LICENSE-espeak-ng`). The father-avatar illustrations and any reference family photographs are personal visual assets and are not covered by that license. Do not reuse them without written permission from Arsh Cheema and the person represented.
+The HTML, CSS, and JavaScript code is licensed under the [MIT License](LICENSE). The father-avatar illustrations and any reference family photographs are personal visual assets and are not covered by that license. Do not reuse them without written permission from Arsh Cheema and the person represented.
